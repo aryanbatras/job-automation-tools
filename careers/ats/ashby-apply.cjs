@@ -7,7 +7,7 @@ const RESUME_PATH = process.env.RESUME_PATH || path.join(__dirname, '..', '..', 
 const LOG_PATH = path.join(__dirname, 'ashby-applied.json');
 const JOB_URL = process.env.JOB_URL || process.argv[2];
 
-function loadLog() { try { return JSON.parse(fs.readFileSync(LOG_PATH, 'utf8')); } catch { return { applied: [], failed: [] }; } }
+function loadLog() { try { return JSON.parse(fs.readFileSync(LOG_PATH, 'utf8')); } catch { return { applied: [], failed: [], skipped: [] }; } }
 function saveLog(log) { fs.writeFileSync(LOG_PATH, JSON.stringify(log, null, 2)); }
 const sleep = (ms) => new Promise(r => setTimeout(r, ms));
 
@@ -256,15 +256,16 @@ async function applyJob(page, jobUrl, log) {
   }
   // click Apply for this Job
   const hasApply = await page.evaluate(() => !!Array.from(document.querySelectorAll('button,a')).find(b => /apply for this job/i.test(b.innerText.trim())));
-  if (!hasApply) {
-    log.failed.push(jobUrl); saveLog(log);
-    return { status: 'no-apply-btn' };
+  if (hasApply) {
+    await page.evaluate(() => {
+      const b = Array.from(document.querySelectorAll('button,a')).find(x => /apply for this job/i.test(x.innerText.trim()));
+      if (b) b.click();
+    });
+    await page.waitForTimeout(6000);
+  } else {
+    // form may already be visible (direct application URL)
+    await page.waitForTimeout(4000);
   }
-  await page.evaluate(() => {
-    const b = Array.from(document.querySelectorAll('button,a')).find(x => /apply for this job/i.test(x.innerText.trim()));
-    if (b) b.click();
-  });
-  await page.waitForTimeout(6000);
 
   await fillForm(page);
   await sleep(2000);
@@ -279,12 +280,23 @@ async function applyJob(page, jobUrl, log) {
     const b = Array.from(document.querySelectorAll('button')).find(x => /submit application/i.test(x.innerText.trim()));
     if (b) b.click();
   });
-  // wait for CAPTCHA if present (user solves manually)
-  for (let i=0;i<24;i++){
-    const hasCaptcha = await page.evaluate(() => !!document.querySelector('iframe[src*="recaptcha"], iframe[src*="hcaptcha"], [class*="captcha"]'));
-    if (!hasCaptcha) break;
-    console.log('CAPTCHA detected - waiting for you to solve it in the browser...');
-    await sleep(5000);
+  // CAPTCHA handling: by default skip and record; set SOLVE_CAPTCHA=1 to wait for manual solve
+  const hasCaptcha = await page.evaluate(() => !!document.querySelector('iframe[src*="recaptcha"], iframe[src*="hcaptcha"], [class*="captcha"]'));
+  if (hasCaptcha) {
+    if (process.env.SOLVE_CAPTCHA === '1') {
+      console.log('CAPTCHA detected - solve it in the browser (waiting up to 2 min)...');
+      for (let i=0;i<24;i++){
+        const still = await page.evaluate(() => !!document.querySelector('iframe[src*="recaptcha"], iframe[src*="hcaptcha"], [class*="captcha"]'));
+        if (!still) break;
+        await sleep(5000);
+      }
+    } else {
+      console.log('CAPTCHA detected - skipping (set SOLVE_CAPTCHA=1 to solve manually).');
+      log.skipped = log.skipped || [];
+      log.skipped.push(jobUrl + ' [captcha]');
+      saveLog(log);
+      return { status: 'skipped-captcha' };
+    }
   }
   await sleep(6000);
   const body = await page.evaluate(() => document.body.innerText);

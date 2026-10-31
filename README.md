@@ -23,6 +23,8 @@ job-automation-tools/
 │   ├── <company>/job.txt      # one folder per company, job.txt holds the apply URL
 ├── whatsapp/                  # Read job postings from WhatsApp channels
 │   └── readchannel.cjs
+├── googleforms/               # Google Forms applications
+│   └── googleforms-apply.cjs
 │   ├── realmalliance/job.txt
 │   └── ...
 ├── AryanBatraResume.pdf       # your resume (not committed)
@@ -80,6 +82,21 @@ JOB_URL="https://jobs.ashbyhq.com/<company>/<id>" node ashby-apply.cjs
 ```
 Each company has a folder under `careers/` with a `job.txt` containing its apply URL.
 Add more companies by creating a folder + `job.txt`, then run the matching ATS script.
+
+### Google Forms
+```bash
+cd googleforms
+FORM_URL="https://docs.google.com/forms/d/e/.../viewform" node googleforms-apply.cjs
+```
+
+## CAPTCHA strategy
+
+Some platforms (Ashby, etc.) use reCAPTCHA Enterprise. Automated traffic may be challenged.
+- By default, the scripts **skip** CAPTCHA jobs, record them in `applied.json` under `skipped`
+  (tagged `[captcha]`), and continue with the next job.
+- To solve manually: set `SOLVE_CAPTCHA=1` and the script will wait (up to 2 min) while you
+  solve the challenge in the browser; then it submits automatically.
+- At the end of a run, review `skipped` entries to know which jobs need manual CAPTCHA solving.
 
 ### WhatsApp channels (read job postings)
 ```bash
