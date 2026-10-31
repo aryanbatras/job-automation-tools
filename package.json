@@ -1,0 +1,11 @@
+{
+  "name": "job-automation-tools",
+  "version": "1.0.0",
+  "description": "Automate job applications on LinkedIn and Wellfound via Chrome DevTools Protocol + Playwright",
+  "main": "index.js",
+  "scripts": {},
+  "dependencies": {
+    "playwright": "^1.64.1"
+  },
+  "license": "MIT"
+}
