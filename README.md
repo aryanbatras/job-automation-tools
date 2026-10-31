@@ -20,7 +20,9 @@ job-automation-tools/
 │   ├── ats/                   # Reusable ATS automation scripts
 │   │   └── ashby-apply.cjs    # Ashby (jobs.ashbyhq.com)
 │   │   # workday, smartrecruiters, recruitee, lever, greenhouse coming
-│   ├── 1password/job.txt      # one folder per company, job.txt holds the apply URL
+│   ├── <company>/job.txt      # one folder per company, job.txt holds the apply URL
+├── whatsapp/                  # Read job postings from WhatsApp channels
+│   └── readchannel.cjs
 │   ├── realmalliance/job.txt
 │   └── ...
 ├── AryanBatraResume.pdf       # your resume (not committed)
@@ -78,6 +80,14 @@ JOB_URL="https://jobs.ashbyhq.com/<company>/<id>" node ashby-apply.cjs
 ```
 Each company has a folder under `careers/` with a `job.txt` containing its apply URL.
 Add more companies by creating a folder + `job.txt`, then run the matching ATS script.
+
+### WhatsApp channels (read job postings)
+```bash
+cd whatsapp
+node readchannel.cjs "NexusHub valut"
+node readchannel.cjs "Off Campus Zone"
+```
+Reads recent messages from a WhatsApp channel and extracts job links into `<channel>_links.txt`.
 
 ## Environment variables
 
