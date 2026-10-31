@@ -101,11 +101,11 @@ async function applyJob(page, jobUrl, log) {
     if (b) b.click();
   });
   await sleep(6000);
-  const hasApply = await page.evaluate(() => !!Array.from(document.querySelectorAll('button,a')).find(b => /^Apply$/i.test(b.innerText.trim())));
+  const applyStillThere = await page.evaluate(() => !!Array.from(document.querySelectorAll('button,a')).find(b => /^Apply$/i.test(b.innerText.trim())));
   const hasTextarea = await page.locator('textarea').count().catch(()=>0);
   const body = await page.evaluate(() => document.body.innerText);
   const successText = /application sent|applied|thank you|submitted/i.test(body);
-  const verified = (!hasApply) && (hasTextarea === 0) && successText;
+  const verified = (!applyStillThere) && (hasTextarea === 0) && successText;
   if (verified) {
     log.applied.push(id); saveLog(log);
     return { status: 'submitted' };
