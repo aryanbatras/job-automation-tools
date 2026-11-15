@@ -1,11 +1,9 @@
 {
   "name": "job-automation-tools",
   "version": "1.0.0",
-  "description": "Automate job applications on LinkedIn, Wellfound, and career portals via Chrome DevTools Protocol + Playwright",
-  "main": "index.js",
-  "scripts": {},
-  "dependencies": {
-    "playwright": "^1.64.1"
+  "description": "Token-efficient job application workflows for OpenCode and Playwright MCP",
+  "scripts": {
+    "test": "node --test tests/*.test.cjs"
   },
   "license": "MIT"
 }
