@@ -182,3 +182,12 @@ test('WhatsApp reading deduplicates messages and links and caps message output',
   assert.equal(result.links.length, 100);
   assert.equal(new Set(result.messages).size, result.messages.length);
 });
+
+test('profile example is placeholder-only and the local profile is ignored', () => {
+  const example = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automation', 'profile.example.json'), 'utf8'));
+  assert.ok(Object.keys(example).length > 0);
+  assert.ok(Object.values(example).every((value) => value === ''));
+
+  const ignoreRules = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
+  assert.match(ignoreRules, /^automation\/profile\.local\.json$/m);
+});

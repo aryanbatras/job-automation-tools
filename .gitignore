@@ -3,4 +3,6 @@ node_modules/
 applied.json
 questions.log
 *-applied.json
+automation/profile.local.json
+/whatsapp/*.txt
 .DS_Store

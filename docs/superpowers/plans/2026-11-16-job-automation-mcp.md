@@ -57,7 +57,7 @@
 - Test: `tests/mcp-workflows.test.cjs`
 
 **Interfaces:**
-- Consumes: MCP workflow paths and statuses from Task 2.
+- Consumes: MCP workflow paths and statuses from Task 1.
 - Produces: agent policy and an empty, copyable local profile template.
 
 - [ ] **Step 1: Add tests** that the example profile contains no actual personal data and `.gitignore` excludes `automation/profile.local.json`.
