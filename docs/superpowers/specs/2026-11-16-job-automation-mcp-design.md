@@ -1,5 +1,7 @@
 # Job Automation MCP Design
 
+> **Superseded:** Use `docs/superpowers/specs/2026-11-16-job-application-ai-loop-design.md` and `.opencode/skills/job-application-automation/SKILL.md` for the approved AI-reviewed application flow and per-application submission approval.
+
 ## Intent
 
 Move the public Job Automation Tools repository from Node scripts attached to a separately launched Chrome CDP endpoint to reusable OpenCode workflows using the configured Playwright MCP extension and the user's one authenticated Chrome profile. Reduce repetitive browser orchestration while preserving AI judgment for job fit, user-specific answers, and exceptions.

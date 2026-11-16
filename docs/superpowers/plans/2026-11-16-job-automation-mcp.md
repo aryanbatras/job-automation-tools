@@ -1,5 +1,7 @@
 # Job Automation MCP Workflows Implementation Plan
 
+> **Superseded:** Use `docs/superpowers/plans/2026-11-16-job-application-ai-loop.md` for the current implementation plan.
+
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
 **Goal:** Replace public Node/CDP browser automation entrypoints with safe, reusable OpenCode workflows executed by the configured Playwright MCP extension.
