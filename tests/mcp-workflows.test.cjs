@@ -69,17 +69,53 @@ function button(text, { disabled = false, insideForm = false, nativeSubmit = fal
   };
 }
 
+function link(text, { visible = true } = {}) {
+  return {
+    innerText: text,
+    value: '',
+    disabled: false,
+    insideForm: false,
+    visible,
+    clicks: 0,
+    tagName: 'A',
+    role: '',
+    getAttribute() { return null; },
+    closest() { return null; },
+    getBoundingClientRect() { return { width: visible ? 100 : 0, height: visible ? 24 : 0 }; },
+  };
+}
+
+function jobCard({ id, title, lines, visible = true }) {
+  const dismiss = {
+    getAttribute: (name) => (name === 'aria-label' ? `Dismiss ${title} job` : null),
+  };
+  return {
+    innerText: lines.join('\n'),
+    tagName: 'DIV',
+    getAttribute(name) {
+      if (name === 'componentkey') return `job-card-component-ref-${id}`;
+      return null;
+    },
+    querySelector(selector) {
+      if (selector.includes('Dismiss')) return dismiss;
+      return null;
+    },
+    getBoundingClientRect() { return { width: visible ? 320 : 0, height: visible ? 120 : 0 }; },
+  };
+}
+
 function fakePage({
   url = 'https://example.com/apply',
   captchaCount = 0,
   fields = [],
   buttons = [],
+  links = [],
   cards = [],
   anchors = [],
   messages = [],
   bodyText = '',
 } = {}) {
-  const controls = [...buttons];
+  const controls = [...buttons, ...links];
   return {
     url: () => url,
     title: async () => 'Test application',
@@ -107,8 +143,9 @@ function fakePage({
       };
     },
     getByRole(role, { name } = {}) {
-      const match = buttons.find((item) => {
-        if (role !== 'button') return false;
+      const match = controls.find((item) => {
+        const matchesRole = role === 'link' ? item.tagName === 'A' : item.tagName === 'BUTTON';
+        if (!matchesRole) return false;
         return name instanceof RegExp ? name.test(item.innerText) : item.innerText === name;
       });
       return {
@@ -266,6 +303,149 @@ test('form preparation flags a native submit control that may submit the form', 
   assert.equal(result.status, 'manual_step');
   assert.equal(result.reason, 'progression_control_may_submit');
   assert.equal(next.clicks, 0);
+});
+
+test('LinkedIn collection extracts title, company, and location from button-backed cards', async () => {
+  const cards = [
+    jobCard({
+      id: '4490325744',
+      title: 'Full Stack Developer',
+      lines: [
+        'Selected, Full Stack Developer (Verified job)',
+        'Full Stack Developer',
+        '',
+        'HuntingCube',
+        '',
+        'Kushalnagar',
+        '',
+        '1.2M INR/yr - 3.2M INR/yr',
+        '',
+        'Viewed',
+      ],
+    }),
+    jobCard({
+      id: '4490325999',
+      title: 'Python Developer',
+      lines: ['Python Developer', '', 'Example Co', '', 'Remote'],
+    }),
+  ];
+  const result = await loadWorkflow('collect-linkedin-jobs.js')(fakePage({
+    url: 'https://www.linkedin.com/jobs/search-results/?currentJobId=4490325744',
+    cards,
+  }));
+
+  assert.equal(result.status, 'ok');
+  assert.deepEqual(JSON.parse(JSON.stringify(result.jobs)), [
+    {
+      title: 'Full Stack Developer',
+      company: 'HuntingCube',
+      location: 'Kushalnagar',
+      url: 'https://www.linkedin.com/jobs/view/4490325744/',
+      selected: true,
+    },
+    {
+      title: 'Python Developer',
+      company: 'Example Co',
+      location: 'Remote',
+      url: 'https://www.linkedin.com/jobs/view/4490325999/',
+      selected: false,
+    },
+  ]);
+});
+
+test('application start rejects unsupported domains and lookalike hosts', async () => {
+  const workflow = loadWorkflow('start-application.js');
+
+  const unsupported = await workflow(fakePage({ url: 'https://jobs.example.test/apply' }));
+  assert.equal(unsupported.status, 'unsupported_site');
+
+  const lookalike = await workflow(fakePage({ url: 'https://www.linkedin.com.evil.test/jobs/view/4490325744' }));
+  assert.equal(lookalike.status, 'unsupported_site');
+
+  const malformed = await workflow(fakePage({ url: 'not-a-url' }));
+  assert.equal(malformed.status, 'unsupported_job_url');
+
+  const searchPage = await workflow(fakePage({ url: 'https://www.linkedin.com/jobs/search/' }));
+  assert.equal(searchPage.status, 'unsupported_job_url');
+});
+
+test('application start opens one Apply entry control on a supported job page', async () => {
+  const apply = button('Apply');
+  const result = await loadWorkflow('start-application.js')(fakePage({
+    url: 'https://www.linkedin.com/jobs/view/4490325744/',
+    buttons: [apply],
+  }));
+
+  assert.equal(result.status, 'started');
+  assert.equal(apply.clicks, 1);
+});
+
+test('application start never clicks a final submission control', async () => {
+  const submit = button('Submit application', { insideForm: true });
+  const result = await loadWorkflow('start-application.js')(fakePage({
+    url: 'https://www.linkedin.com/jobs/view/4490325744/',
+    buttons: [submit],
+  }));
+
+  assert.equal(result.status, 'manual_step');
+  assert.equal(submit.clicks, 0);
+});
+
+test('submission clicks one unambiguous final control and verifies success', async () => {
+  const submit = button('Submit application', { insideForm: true });
+  const result = await loadWorkflow('submit-application.js')(fakePage({
+    buttons: [submit],
+    bodyText: 'Your application has been submitted',
+  }));
+
+  assert.equal(result.status, 'submitted');
+  assert.equal(submit.clicks, 1);
+});
+
+test('submission refuses to guess between multiple final controls', async () => {
+  const submit = button('Submit application', { insideForm: true });
+  const send = button('Send application', { insideForm: true });
+  const result = await loadWorkflow('submit-application.js')(fakePage({
+    buttons: [submit, send],
+    bodyText: 'Your application has been submitted',
+  }));
+
+  assert.equal(result.status, 'ambiguous_final_control');
+  assert.equal(submit.clicks, 0);
+  assert.equal(send.clicks, 0);
+});
+
+test('submission never clicks a misleading job-page Apply control', async () => {
+  const apply = button('Apply');
+  const result = await loadWorkflow('submit-application.js')(fakePage({
+    buttons: [apply],
+    bodyText: 'Your application has been submitted',
+  }));
+
+  assert.equal(result.status, 'no_final_control');
+  assert.equal(apply.clicks, 0);
+});
+
+test('submission reports unverified success once without retrying', async () => {
+  const submit = button('Submit application', { insideForm: true });
+  const result = await loadWorkflow('submit-application.js')(fakePage({
+    buttons: [submit],
+    bodyText: 'Thanks for your time',
+  }));
+
+  assert.equal(result.status, 'submission_unverified');
+  assert.equal(submit.clicks, 1);
+});
+
+test('submission stops at a challenge before clicking anything', async () => {
+  const submit = button('Submit application', { insideForm: true });
+  const result = await loadWorkflow('submit-application.js')(fakePage({
+    captchaCount: 1,
+    buttons: [submit],
+  }));
+
+  assert.equal(result.status, 'human_intervention_required');
+  assert.equal(submit.clicks, 0);
 });
 
 test('WhatsApp reading deduplicates messages and links and caps message output', async () => {

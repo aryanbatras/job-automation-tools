@@ -5,6 +5,15 @@
   "domains": {
     "linkedin.com": {
       "captcha": "stop"
+    },
+    "wellfound.com": {
+      "captcha": "stop"
+    },
+    "ashbyhq.com": {
+      "captcha": "stop"
+    },
+    "docs.google.com": {
+      "captcha": "stop"
     }
   }
 }
