@@ -497,7 +497,10 @@ test('active browser workflows do not use direct Playwright/CDP or embed persona
       else if (/\.(?:cjs|js)$/i.test(entry.name)) sourceFiles.push(fullPath);
     }
   };
-  for (const root of roots) visit(path.join(__dirname, '..', root));
+  for (const root of roots) {
+    const directory = path.join(__dirname, '..', root);
+    if (fs.existsSync(directory)) visit(directory);
+  }
 
   assert.ok(sourceFiles.length >= 3);
   for (const file of sourceFiles) {
