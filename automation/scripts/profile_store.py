@@ -290,6 +290,48 @@ def save_application(content_root: Path, application_id: str, record: dict[str, 
     write_private_json(Path(content_root) / "local" / "applications" / f"{application_id}.json", payload)
 
 
+def preflight(content_root: Path) -> dict[str, Any]:
+    """Report whether the local store is ready for automation, without echoing values."""
+    local_root = Path(content_root) / "local"
+    checks: dict[str, str] = {}
+
+    profile_path = local_root / "profile.json"
+    if not profile_path.is_file():
+        checks["profile"] = "missing"
+    else:
+        try:
+            profile = _read_object(profile_path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            checks["profile"] = "invalid"
+        else:
+            checks["profile"] = "ok" if not validate_profile(profile) else "incomplete"
+
+    answer_path = local_root / "answer-bank.json"
+    if not answer_path.is_file():
+        checks["answerBank"] = "missing"
+    else:
+        try:
+            bank = _read_object(answer_path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            checks["answerBank"] = "invalid"
+        else:
+            checks["answerBank"] = "ok" if isinstance(bank.get("entries"), list) else "invalid"
+
+    policy_path = local_root / "site-policies.json"
+    if not policy_path.is_file():
+        checks["sitePolicies"] = "missing"
+    else:
+        try:
+            policy = _read_object(policy_path)
+        except (OSError, ValueError, json.JSONDecodeError):
+            checks["sitePolicies"] = "invalid"
+        else:
+            checks["sitePolicies"] = "ok" if not validate_site_policy(policy) else "invalid"
+
+    ready = all(value == "ok" for value in checks.values())
+    return {"status": "ready" if ready else "blocked", "checks": checks}
+
+
 def _read_private_input(path: Path, local_root: Path) -> dict[str, Any]:
     path = Path(path).resolve()
     local_root = Path(local_root).resolve()
@@ -308,6 +350,7 @@ def main(argv: list[str] | None = None) -> int:
     commands = parser.add_subparsers(dest="command", required=True)
     commands.add_parser("init")
     commands.add_parser("profile-status")
+    commands.add_parser("preflight")
     commands.add_parser("validate-site-policy")
     record = commands.add_parser("record-answer")
     record.add_argument("--input-file", required=True, type=Path)
@@ -329,6 +372,10 @@ def main(argv: list[str] | None = None) -> int:
             missing = validate_profile(profile)
             _json_status({"status": "complete" if not missing else "incomplete", "missing": missing})
             return 0
+        if args.command == "preflight":
+            report = preflight(args.content_root)
+            _json_status(report)
+            return 0 if report["status"] == "ready" else 2
         if args.command == "validate-site-policy":
             policy_path = local_root / "site-policies.json"
             policy = _read_object(policy_path) if policy_path.exists() else {}

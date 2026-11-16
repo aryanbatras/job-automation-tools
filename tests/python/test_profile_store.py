@@ -237,6 +237,62 @@ class ProfileStoreTests(unittest.TestCase):
         self.assertTrue((self.content_root / "local" / "applications" / "app-123.json").is_file())
         self.assertFalse((self.content_root / "outside.json").exists())
 
+    def test_preflight_blocks_until_profile_answers_and_policy_are_ready(self):
+        store = load_store(self)
+        local_root = Path(self.temp.name) / "preflight-content"
+        command = [
+            sys.executable,
+            str(ROOT / "automation" / "scripts" / "profile_store.py"),
+            "--content-root",
+            str(local_root),
+        ]
+
+        blocked = subprocess.run([*command, "preflight"], capture_output=True, text=True, cwd=ROOT)
+        self.assertEqual(blocked.returncode, 2)
+        report = json.loads(blocked.stdout)
+        self.assertEqual(report["status"], "blocked")
+        self.assertEqual(report["checks"]["profile"], "missing")
+
+        store.initialize_store(local_root)
+        blocked = subprocess.run([*command, "preflight"], capture_output=True, text=True, cwd=ROOT)
+        self.assertEqual(blocked.returncode, 2)
+        report = json.loads(blocked.stdout)
+        self.assertEqual(report["status"], "blocked")
+        self.assertEqual(report["checks"]["profile"], "incomplete")
+        self.assertEqual(report["checks"]["answerBank"], "ok")
+        self.assertEqual(report["checks"]["sitePolicies"], "ok")
+
+        profile_path = local_root / "local" / "profile.json"
+        profile = json.loads(profile_path.read_text(encoding="utf-8"))
+        profile.update(valid_profile())
+        profile_path.write_text(json.dumps(profile), encoding="utf-8")
+
+        ready = subprocess.run([*command, "preflight"], capture_output=True, text=True, cwd=ROOT)
+        self.assertEqual(ready.returncode, 0)
+        report = json.loads(ready.stdout)
+        self.assertEqual(report["status"], "ready")
+        self.assertEqual(report["checks"], {"profile": "ok", "answerBank": "ok", "sitePolicies": "ok"})
+
+    def test_preflight_never_prints_profile_values(self):
+        local_root = Path(self.temp.name) / "preflight-redaction"
+        command = [
+            sys.executable,
+            str(ROOT / "automation" / "scripts" / "profile_store.py"),
+            "--content-root",
+            str(local_root),
+            "preflight",
+        ]
+        store = load_store(self)
+        store.initialize_store(local_root)
+        profile_path = local_root / "local" / "profile.json"
+        profile = json.loads(profile_path.read_text(encoding="utf-8"))
+        profile["contact"]["email"] = "PRIVATE-ANSWER-SENTINEL"
+        profile_path.write_text(json.dumps(profile), encoding="utf-8")
+
+        result = subprocess.run(command, capture_output=True, text=True, cwd=ROOT)
+
+        self.assertNotIn("PRIVATE-ANSWER-SENTINEL", result.stdout + result.stderr)
+
     def test_cli_status_never_prints_profile_values(self):
         local_root = Path(self.temp.name) / "cli-content"
         command = [

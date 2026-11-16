@@ -79,11 +79,20 @@ test('README and AGENTS use current local data and document setup plus provider 
 
 test('old MCP design and plan are clearly marked superseded', () => {
   for (const relativePath of [
-    'docs/superpowers/specs/2026-11-16-job-automation-mcp-design.md',
-    'docs/superpowers/plans/2026-11-16-job-automation-mcp.md',
+    'docs/archive/2026-11-16-job-automation-mcp-design.md',
+    'docs/archive/2026-11-16-job-automation-mcp.md',
   ]) {
     const document = read(relativePath);
     assert.match(document.slice(0, 500), /superseded/i, `${relativePath} must be marked superseded at top`);
     assert.ok(document.slice(0, 500).includes('2026-11-16-job-application-ai-loop'));
   }
+});
+
+test('onboarding is a hard gate before any application runs', () => {
+  const skill = fs.readFileSync(skillPath, 'utf8');
+  const readme = read('README.md');
+  assert.ok(skill.includes('profile_store.py preflight'));
+  assert.match(skill, /Do not start any application until preflight reports `ready`/);
+  assert.ok(readme.includes('profile_store.py preflight'));
+  assert.ok(readme.includes('Prerequisites: onboarding before any automation'));
 });

@@ -84,10 +84,9 @@ async (page) => {
     const title = card.dismissLabel.replace(/^Dismiss\s+/i, '').replace(/\s+job$/i, '').trim();
     const lines = card.cardText.split('\n').map((line) => line.trim()).filter(Boolean);
     const facts = lines.filter((line) => {
-      if (/^(selected|new|viewed|applied|saved)\b/i.test(line) && line.toLowerCase().includes(title.toLowerCase())) {
-        return false;
-      }
-      if (title && line.toLowerCase() === title.toLowerCase()) return false;
+      const normalized = line.replace(/\s*\((?:verified job|promoted|new|easy apply)\)\s*$/i, '').trim();
+      if (/^(selected|new|viewed|applied|saved)\b/i.test(normalized)) return false;
+      if (title && normalized.toLowerCase() === title.toLowerCase()) return false;
       return !isBadge(line) && !isCompensation(line);
     });
 

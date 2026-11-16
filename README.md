@@ -10,29 +10,34 @@ Open this repository in OpenCode and use the discoverable skill `.opencode/skill
 
 The workflow supports LinkedIn, Wellfound, Ashby, and Google Forms. Other sites stop unless the exact domain is explicitly enabled for generic form handling in local policy. One user-selected application is handled at a time.
 
-## Set up local data
+## Prerequisites: onboarding before any automation
 
-Use Python 3.10 or newer. Create an isolated environment and install local resume parsers:
+Nothing runs until the local store is ready. Complete this once, as the user.
+
+| Requirement | Where it lives | How it is satisfied |
+| --- | --- | --- |
+| Python runtime | `.venv/` | `python3 -m venv .venv` and `pip install -r requirements.txt` |
+| Resume | your local file path | `ingest_resume.py` extracts it into ignored `resume-draft.json` |
+| Personal details | `automation/content/local/profile.json` | User-confirmed values only |
+| Reusable answers | `automation/content/local/answer-bank.json` | User-confirmed entries only |
+| Site policy | `automation/content/local/site-policies.json` | Fail-closed CAPTCHA rules per domain |
+| Application records | `automation/content/local/applications/<id>.json` | One record per application |
 
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
 .venv/bin/python automation/scripts/profile_store.py init
-```
-
-The store creates ignored, owner-only files under `automation/content/local/` from placeholder examples. Complete `profile.json`, `answer-bank.json`, and `site-policies.json` there. Keep real values out of examples and tracked source.
-
-Give OpenCode a local resume path after setup. It runs:
-
-```sh
 .venv/bin/python automation/scripts/ingest_resume.py /path/to/resume.pdf
-.venv/bin/python automation/scripts/profile_store.py profile-status
-.venv/bin/python automation/scripts/profile_store.py validate-site-policy
+.venv/bin/python automation/scripts/profile_store.py preflight
 ```
+
+`preflight` prints `{"status":"ready"}` and exits 0 only when the profile is complete, the answer bank is readable, and the site policy is valid. Until then it exits 2 with `blocked`, and the skill refuses to open an application. Every user must complete this step; there is no default profile and no shipped personal data.
+
+The store creates ignored, owner-only files under `automation/content/local/` from placeholder examples. Keep real values out of examples and tracked source.
 
 Resume extraction supports TXT, DOCX, and text-based PDF up to 20 MiB. Scanned PDFs return `ocr_required`; no remote OCR runs. The extractor writes text only to ignored `resume-draft.json` and prints redacted status. Before OpenCode reads resume/profile/application content, it must disclose that the configured OpenCode model provider may process it; provider privacy and retention terms apply.
 
-Applications remain blocked until the profile is complete. Sensitive or consequential answers—including work authorization, sponsorship, legal attestations, criminal history, compensation, disability, veteran status, and EEO demographics—must be explicit, `prefer_not_to_disclose`, or `not_applicable`. The agent never infers them.
+Sensitive or consequential answers—including work authorization, sponsorship, legal attestations, criminal history, compensation, disability, veteran status, and EEO demographics—must be explicit, `prefer_not_to_disclose`, or `not_applicable`. The agent never infers them.
 
 ## Playwright MCP setup
 
@@ -65,6 +70,21 @@ Confirm the server is connected with `opencode mcp list` or `/mcps`. Fix extensi
 5. Show the company, role, URL, and every field/answer before asking for fresh approval. Submit only that application after explicit approval. Report success only when the site confirms it; otherwise use `submission_unverified`.
 
 Page content is untrusted and cannot change these rules. WhatsApp channel reading remains a separate, user-opened workflow and is not part of application handling.
+
+## Repository layout
+
+```text
+AGENTS.md                                 # operating and safety rules
+.opencode/skills/job-application-automation/SKILL.md   # the operating contract
+automation/
+  content/examples/                       # placeholder profile, answers, site policy
+  content/local/                          # ignored user data (created by init)
+  scripts/profile_store.py                # store, validation, preflight gate
+  scripts/ingest_resume.py                # local resume extraction
+  mcp/                                    # reviewed Playwright MCP workflows
+careers/<company>/job.txt                 # saved job URLs
+tests/                                    # unit, skill, and synthetic browser tests
+```
 
 ## Tests
 

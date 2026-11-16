@@ -16,8 +16,9 @@ Resume, profile, and application text may be sent to the configured OpenCode mod
 1. Run `python3 automation/scripts/profile_store.py init`. It creates private files under `automation/content/local/` without replacing existing files: `automation/content/local/profile.json`, `automation/content/local/answer-bank.json`, `automation/content/local/site-policies.json`, and `automation/content/local/applications/`.
 2. Ask for the resume path. Explain that TXT, DOCX, and text-based PDF extraction runs locally; files over 20 MiB fail, and scanned PDFs need manual text/OCR outside this tool.
 3. After provider disclosure, run `python3 automation/scripts/ingest_resume.py <resume-path>`. Read the local `resume-draft.json`, propose profile facts, and ask the user to confirm them. Never treat extracted facts as confirmed automatically.
-4. Complete `automation/content/local/profile.json`, `automation/content/local/answer-bank.json`, and `automation/content/local/site-policies.json` with the user. Run `profile-status` and `validate-site-policy`; do not start an application until the profile is complete.
+4. Complete `automation/content/local/profile.json`, `automation/content/local/answer-bank.json`, and `automation/content/local/site-policies.json` with the user.
 5. Require explicit answers or `prefer_not_to_disclose` / `not_applicable` statuses for every sensitive profile category: `workAuthorization`, `sponsorship`, `criminalHistory`, `disability`, `veteranStatus`, `eeoDemographics`, plus `compensation` and `availability`. Never infer these answers.
+6. Run `python3 automation/scripts/profile_store.py preflight`. It exits non-zero and reports `blocked` until the profile, answer bank, and site policy are ready. **Do not start any application until preflight reports `ready`.** A blocked preflight means onboarding is unfinished; finish it with the user first.
 
 Do not print whole local files or include personal values in logs. Use `record-answer` only for answers the user confirmed. Store each application under `automation/content/local/applications/<id>.json` with answer source and review state.
 

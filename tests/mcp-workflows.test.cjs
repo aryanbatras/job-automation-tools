@@ -326,7 +326,7 @@ test('LinkedIn collection extracts title, company, and location from button-back
     jobCard({
       id: '4490325999',
       title: 'Python Developer',
-      lines: ['Python Developer', '', 'Example Co', '', 'Remote'],
+      lines: ['Python Developer (Verified job)', '', 'Example Co', '', 'Remote'],
     }),
   ];
   const result = await loadWorkflow('collect-linkedin-jobs.js')(fakePage({
