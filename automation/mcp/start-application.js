@@ -50,12 +50,22 @@ async (page) => {
   const controls = await page.locator('button, a[href], [role="button"]').evaluateAll((elements) =>
     elements.map((element) => {
       const rect = element.getBoundingClientRect();
+      const tag = element.tagName.toLowerCase();
+      const selector = (() => {
+        if (element.id) return `#${CSS.escape(element.id)}`;
+        const tracking = element.getAttribute('data-tracking-control-name');
+        if (tracking) return `[data-tracking-control-name="${tracking}"]`;
+        const aria = element.getAttribute('aria-label');
+        if (aria) return `${tag}[aria-label="${aria.replace(/"/g, '\\"')}"]`;
+        return '';
+      })();
       return {
         text: (element.innerText || element.value || element.getAttribute('aria-label') || '').trim(),
         visible: rect.width > 0 && rect.height > 0,
         disabled: Boolean(element.disabled || element.getAttribute('aria-disabled') === 'true'),
         tag: element.tagName,
         role: (element.getAttribute('role') || '').toLowerCase(),
+        selector,
         insideForm: Boolean(element.closest('form')),
         nativeSubmit: element.tagName === 'BUTTON' && (element.getAttribute('type') || '').toLowerCase() === 'submit',
       };
@@ -84,11 +94,19 @@ async (page) => {
   }
 
   const entry = entryControls[0];
-  const exact = new RegExp(`^${entry.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
-  if (entry.tag === 'A') {
-    await page.getByRole('link', { name: exact }).click();
+  const selector = entry.selector;
+  if (selector) {
+    const target = page.locator(selector).first();
+    await target.click({ timeout: 15000 }).catch(async () => {
+      await target.evaluate((element) => element.click());
+    });
   } else {
-    await page.getByRole('button', { name: exact }).click();
+    const exact = new RegExp(`^${entry.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i');
+    if (entry.tag === 'A') {
+      await page.getByRole('link', { name: exact }).click();
+    } else {
+      await page.getByRole('button', { name: exact }).click();
+    }
   }
   await page.waitForTimeout(500);
 

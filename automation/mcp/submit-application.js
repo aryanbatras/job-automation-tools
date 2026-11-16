@@ -51,7 +51,7 @@ async (page) => {
   await page.waitForTimeout(500);
 
   const body = await page.locator('body').innerText();
-  const success = /application\s+(was|has been)\s+submitted|thank you for applying|we('| ha)ve received your application|submitted successfully|application sent/i
+  const success = /application\s+(was|has been|is)\s+submitted|application\s+submitted|thank you for applying|we('| ha)ve received your application|submitted successfully|application sent/i
     .test(body);
 
   if (!success) {
