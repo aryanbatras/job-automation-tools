@@ -258,12 +258,21 @@ test('WhatsApp reading deduplicates messages and links and caps message output',
   assert.equal(result.links.includes('https://jobs.example/hidden'), false);
 });
 
-test('profile example is placeholder-only and the local profile is ignored', () => {
-  const example = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'automation', 'profile.example.json'), 'utf8'));
-  assert.ok(Object.keys(example).length > 0);
-  assert.ok(Object.values(example).every((value) => value === ''));
+test('local content examples are placeholders and private store paths are ignored', () => {
+  const examples = path.join(__dirname, '..', 'automation', 'content', 'examples');
+  const profile = JSON.parse(fs.readFileSync(path.join(examples, 'profile.example.json'), 'utf8'));
+  const answerBank = JSON.parse(fs.readFileSync(path.join(examples, 'answer-bank.example.json'), 'utf8'));
+  const sitePolicies = JSON.parse(fs.readFileSync(path.join(examples, 'site-policies.example.json'), 'utf8'));
+
+  assert.equal(profile.onboarding.confirmed, false);
+  assert.equal(profile.identity.legalName, '');
+  assert.equal(profile.contact.email, '');
+  assert.equal(answerBank.entries.length, 0);
+  assert.equal(sitePolicies.default.captcha, 'stop');
+  assert.equal(sitePolicies.domains['linkedin.com'].captcha, 'stop');
 
   const ignoreRules = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
+  assert.match(ignoreRules, /^automation\/content\/local\/$/m);
   assert.match(ignoreRules, /^automation\/profile\.local\.json$/m);
 });
 

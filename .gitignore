@@ -1,8 +1,11 @@
 node_modules/
+__pycache__/
+*.py[cod]
 *.pdf
 applied.json
 questions.log
 *-applied.json
 automation/profile.local.json
+automation/content/local/
 /whatsapp/*.txt
 .DS_Store

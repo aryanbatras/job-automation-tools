@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "onboarding": {
+    "confirmed": false
+  },
+  "identity": {
+    "legalName": "",
+    "preferredName": ""
+  },
+  "contact": {
+    "email": "",
+    "phone": "",
+    "location": ""
+  },
+  "resume": {
+    "sourcePath": "",
+    "confirmed": false
+  },
+  "links": {
+    "linkedin": {"status": "unanswered", "value": null},
+    "github": {"status": "unanswered", "value": null},
+    "portfolio": {"status": "unanswered", "value": null}
+  },
+  "employment": {"status": "unanswered", "items": []},
+  "education": {"status": "unanswered", "items": []},
+  "skills": {"status": "unanswered", "items": []},
+  "certifications": {"status": "unanswered", "items": []},
+  "preferences": {
+    "targetRoles": [],
+    "locations": [],
+    "workModes": [],
+    "availability": {"status": "unanswered", "value": null},
+    "compensation": {"status": "unanswered", "value": null},
+    "travelRelocation": {"status": "unanswered", "value": null}
+  },
+  "sensitive": {
+    "workAuthorization": {"status": "unanswered", "value": null},
+    "sponsorship": {"status": "unanswered", "value": null},
+    "criminalHistory": {"status": "unanswered", "value": null},
+    "disability": {"status": "unanswered", "value": null},
+    "veteranStatus": {"status": "unanswered", "value": null},
+    "eeoDemographics": {"status": "unanswered", "value": null}
+  }
+}
