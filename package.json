@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "Token-efficient job application workflows for OpenCode and Playwright MCP",
   "scripts": {
-    "test": "node --test tests/*.test.cjs"
+    "test": "node --test tests/*.test.cjs",
+    "test:browser": "node --test tests/browser/*.test.cjs"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "playwright": "^1.65.1"
+  }
 }

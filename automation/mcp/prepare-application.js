@@ -1,6 +1,6 @@
 async (page) => {
   const captchaCount = await page.locator(
-    'iframe[src*="recaptcha"], iframe[src*="hcaptcha"], [class*="captcha" i]',
+    'iframe[src*="recaptcha"], iframe[src*="hcaptcha"], iframe[src*="turnstile"], [class*="captcha" i], [id*="captcha" i], [data-sitekey]',
   ).count();
   if (captchaCount > 0) {
     return { status: 'human_intervention_required', reason: 'captcha_detected' };
@@ -14,6 +14,7 @@ async (page) => {
         visible: rect.width > 0 && rect.height > 0,
         disabled: Boolean(element.disabled || element.getAttribute('aria-disabled') === 'true'),
         insideForm: Boolean(element.closest('form')),
+        nativeSubmit: element.tagName === 'BUTTON' && (element.getAttribute('type') || '').toLowerCase() === 'submit',
       };
     }),
   );
@@ -31,8 +32,38 @@ async (page) => {
     };
   }
 
+  const unsupported = await page
+    .locator('iframe, [role="combobox"], [role="listbox"], [contenteditable="true"], input[type="file"]')
+    .evaluateAll((elements) =>
+      elements
+        .filter((element) => {
+          const rect = element.getBoundingClientRect();
+          return rect.width > 0 && rect.height > 0;
+        })
+        .map((element) => {
+          const role = (element.getAttribute('role') || '').toLowerCase();
+          const kind = element.tagName === 'IFRAME'
+            ? 'iframe'
+            : element.tagName === 'INPUT'
+              ? 'file_input'
+              : 'custom_widget';
+          return {
+            kind,
+            label: (
+              element.getAttribute('title')
+              || element.getAttribute('aria-label')
+              || element.getAttribute('name')
+              || 'unsupported control'
+            ).trim(),
+          };
+        }),
+    );
+  if (unsupported.length > 0) {
+    return { status: 'manual_step', reason: 'unsupported_control', unsupported };
+  }
+
   const fields = await page.locator(
-    'input:not([type="hidden"]):visible, textarea:visible, select:visible, [role="combobox"]:visible',
+    'input:not([type="hidden"]):not([type="file"]):visible, textarea:visible, select:visible',
   ).evaluateAll((elements) => {
     const fields = [];
     const radioGroups = new Map();
@@ -120,19 +151,19 @@ async (page) => {
     };
   }
 
-  const advanceControl = buttons.find(({ text, visible, disabled }) =>
-    visible && !disabled && /^(next|continue|review)$/i.test(text),
+  const progressionControl = buttons.find(({ text, visible, disabled }) =>
+    visible && !disabled && /^(next|continue|review|back|previous)$/i.test(text),
   );
-  if (!advanceControl) {
-    return { status: 'ready_for_review', fields };
+  if (progressionControl) {
+    return {
+      status: 'manual_step',
+      reason: progressionControl.nativeSubmit
+        ? 'progression_control_may_submit'
+        : 'progression_requires_verified_adapter',
+      control: progressionControl.text,
+      fields,
+    };
   }
 
-  await page.getByRole('button', { name: new RegExp(`^${advanceControl.text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`, 'i') }).click();
-  await page.waitForTimeout(250);
-  return {
-    status: 'advanced',
-    control: advanceControl.text,
-    url: page.url(),
-    title: await page.title(),
-  };
-}
+  return { status: 'ready_for_review', fields };
+};

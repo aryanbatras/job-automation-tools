@@ -48,15 +48,24 @@ function control({ label = '', value = '', type = 'text', required = false, inva
   };
 }
 
-function button(text, { disabled = false, insideForm = false } = {}) {
+function button(text, { disabled = false, insideForm = false, nativeSubmit = false, visible = true } = {}) {
   return {
     innerText: text,
+    value: '',
     disabled,
     insideForm,
+    nativeSubmit,
+    visible,
     clicks: 0,
-    getAttribute(name) { return name === 'aria-disabled' && disabled ? 'true' : null; },
+    tagName: 'BUTTON',
+    role: '',
+    getAttribute(name) {
+      if (name === 'aria-disabled' && disabled) return 'true';
+      if (name === 'type' && nativeSubmit) return 'submit';
+      return null;
+    },
     closest(selector) { return selector === 'form' && insideForm ? {} : null; },
-    getBoundingClientRect() { return { width: 100, height: 24 }; },
+    getBoundingClientRect() { return { width: visible ? 100 : 0, height: visible ? 24 : 0 }; },
   };
 }
 
@@ -65,9 +74,12 @@ function fakePage({
   captchaCount = 0,
   fields = [],
   buttons = [],
+  cards = [],
   anchors = [],
   messages = [],
+  bodyText = '',
 } = {}) {
+  const controls = [...buttons];
   return {
     url: () => url,
     title: async () => 'Test application',
@@ -75,7 +87,11 @@ function fakePage({
     locator(selector) {
       return {
         count: async () => selector.includes('captcha') ? captchaCount : 0,
+        innerText: async () => bodyText,
         evaluateAll: async (callback) => {
+          if (selector.includes('input[type="submit"]')) return callback(buttons);
+          if (selector.includes('a[href]')) return callback(controls);
+          if (selector.includes('[role="button"]')) return callback(cards);
           if (selector.includes('/jobs/view/')) return callback(anchors.map((anchor) => ({
             ...anchor,
             getBoundingClientRect: anchor.getBoundingClientRect || (() => ({ width: 100, height: 24 })),
@@ -118,8 +134,8 @@ test('LinkedIn collection normalizes and deduplicates job links', async () => {
 
   assert.equal(result.status, 'ok');
   assert.deepEqual(JSON.parse(JSON.stringify(result.jobs)), [
-    { title: 'Backend Engineer', company: 'Acme', location: 'Remote', url: 'https://www.linkedin.com/jobs/view/123/' },
-    { title: 'Frontend Engineer', company: 'Example Co', location: 'Remote', url: 'https://www.linkedin.com/jobs/view/456/' },
+    { title: 'Backend Engineer', company: 'Acme', location: 'Remote', url: 'https://www.linkedin.com/jobs/view/123/', selected: false },
+    { title: 'Frontend Engineer', company: 'Example Co', location: 'Remote', url: 'https://www.linkedin.com/jobs/view/456/', selected: false },
   ]);
 });
 
@@ -224,19 +240,32 @@ test('form preparation ignores hidden required fields', async () => {
     buttons: [next],
   }));
 
-  assert.equal(result.status, 'advanced');
-  assert.equal(next.clicks, 1);
+  assert.equal(result.status, 'manual_step');
+  assert.equal(result.reason, 'progression_requires_verified_adapter');
+  assert.equal(next.clicks, 0);
 });
 
-test('form preparation advances only one safe step after required fields are valid', async () => {
+test('form preparation never clicks a progression control without a verified adapter', async () => {
   const next = button('Review');
   const result = await loadWorkflow('prepare-application.js')(fakePage({
     fields: [control({ label: 'Name', value: 'Filled', required: true })],
     buttons: [next],
   }));
 
-  assert.equal(result.status, 'advanced');
-  assert.equal(next.clicks, 1);
+  assert.equal(result.status, 'manual_step');
+  assert.equal(next.clicks, 0);
+});
+
+test('form preparation flags a native submit control that may submit the form', async () => {
+  const next = button('Next', { nativeSubmit: true });
+  const result = await loadWorkflow('prepare-application.js')(fakePage({
+    fields: [control({ label: 'Name', value: 'Filled', required: true })],
+    buttons: [next],
+  }));
+
+  assert.equal(result.status, 'manual_step');
+  assert.equal(result.reason, 'progression_control_may_submit');
+  assert.equal(next.clicks, 0);
 });
 
 test('WhatsApp reading deduplicates messages and links and caps message output', async () => {
@@ -269,7 +298,9 @@ test('local content examples are placeholders and private store paths are ignore
   assert.equal(profile.contact.email, '');
   assert.equal(answerBank.entries.length, 0);
   assert.equal(sitePolicies.default.captcha, 'stop');
-  assert.equal(sitePolicies.domains['linkedin.com'].captcha, 'stop');
+  for (const domain of ['linkedin.com', 'wellfound.com', 'ashbyhq.com', 'docs.google.com']) {
+    assert.equal(sitePolicies.domains[domain].captcha, 'stop');
+  }
 
   const ignoreRules = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
   assert.match(ignoreRules, /^automation\/content\/local\/$/m);
