@@ -5,6 +5,7 @@ const test = require('node:test');
 const vm = require('node:vm');
 
 const workflowPath = (name) => path.join(__dirname, '..', 'automation', 'mcp', name);
+const radioGroupScopes = new Map();
 
 function loadWorkflow(name) {
   const source = fs.readFileSync(workflowPath(name), 'utf8');
@@ -13,7 +14,15 @@ function loadWorkflow(name) {
   return workflow;
 }
 
-function control({ label = '', value = '', type = 'text', required = false, invalid = false, options = [], checked = false } = {}) {
+function control({ label = '', value = '', type = 'text', required = false, invalid = false, options = [], checked = false, name = '', groupLabel = '', visible = true } = {}) {
+  let group = null;
+  if (groupLabel) {
+    group = radioGroupScopes.get(groupLabel);
+    if (!group) {
+      group = { querySelector: () => ({ innerText: groupLabel }), getAttribute: () => null };
+      radioGroupScopes.set(groupLabel, group);
+    }
+  }
   const attributes = {
     'aria-label': label,
     placeholder: '',
@@ -23,23 +32,30 @@ function control({ label = '', value = '', type = 'text', required = false, inva
   return {
     tagName: type === 'textarea' ? 'TEXTAREA' : type === 'select' ? 'SELECT' : 'INPUT',
     type,
+    name,
     value,
     checked,
     required,
+    visible,
     labels: label ? [{ innerText: label }] : [],
     options: options.map((text) => ({ text, label: text })),
     validity: { valid: !invalid },
     getAttribute(name) { return attributes[name] ?? null; },
-    getBoundingClientRect() { return { width: 100, height: 24 }; },
+    closest() {
+      return group;
+    },
+    getBoundingClientRect() { return { width: visible ? 100 : 0, height: visible ? 24 : 0 }; },
   };
 }
 
-function button(text, { disabled = false } = {}) {
+function button(text, { disabled = false, insideForm = false } = {}) {
   return {
     innerText: text,
     disabled,
+    insideForm,
     clicks: 0,
     getAttribute(name) { return name === 'aria-disabled' && disabled ? 'true' : null; },
+    closest(selector) { return selector === 'form' && insideForm ? {} : null; },
     getBoundingClientRect() { return { width: 100, height: 24 }; },
   };
 }
@@ -60,10 +76,16 @@ function fakePage({
       return {
         count: async () => selector.includes('captcha') ? captchaCount : 0,
         evaluateAll: async (callback) => {
-          if (selector.includes('/jobs/view/')) return callback(anchors);
-          if (selector.includes('selectable-text') || selector.includes('copyable-text')) return callback(messages);
+          if (selector.includes('/jobs/view/')) return callback(anchors.map((anchor) => ({
+            ...anchor,
+            getBoundingClientRect: anchor.getBoundingClientRect || (() => ({ width: 100, height: 24 })),
+          })));
+          if (selector.includes('selectable-text') || selector.includes('copyable-text')) return callback(messages.map((message) => ({
+            ...message,
+            getBoundingClientRect: message.getBoundingClientRect || (() => ({ width: 100, height: 24 })),
+          })));
           if (selector.includes('button')) return callback(buttons);
-          if (selector.includes('input:not')) return callback(fields);
+          if (selector.includes('input:not')) return callback(selector.includes(':visible') ? fields.filter((field) => field.visible) : fields);
           return callback([]);
         },
       };
@@ -87,6 +109,7 @@ test('LinkedIn collection normalizes and deduplicates job links', async () => {
     { href: 'https://www.linkedin.com/jobs/view/123/?tracking=one', innerText: 'Backend Engineer', closest: () => card('Backend Engineer\nAcme\nRemote') },
     { href: 'https://www.linkedin.com/jobs/view/123/?tracking=two', innerText: 'Duplicate', closest: () => card('Duplicate') },
     { href: 'https://www.linkedin.com/jobs/view/456/', innerText: 'Frontend Engineer', closest: () => card('Frontend Engineer\nExample Co\nRemote') },
+    { href: 'https://www.linkedin.com/jobs/view/789/', innerText: 'Hidden Engineer', closest: () => card('Hidden Engineer\nHidden Co\nRemote'), getBoundingClientRect: () => ({ width: 0, height: 0 }) },
     { href: 'https://www.linkedin.com/in/not-a-job/', innerText: 'Ignore', closest: () => card('Ignore') },
   ];
   const result = await loadWorkflow('collect-linkedin-jobs.js')(fakePage({
@@ -118,6 +141,30 @@ test('form preparation never clicks a final submission control', async () => {
     fields: [control({ label: 'Name', value: 'Filled', required: true })],
     buttons: [submit],
   }));
+
+  assert.equal(result.status, 'approval_required');
+  assert.equal(submit.clicks, 0);
+});
+
+test('form preparation does not mistake a job-level Apply button for final submission', async () => {
+  const apply = button('Apply');
+  const result = await loadWorkflow('prepare-application.js')(fakePage({ buttons: [apply] }));
+
+  assert.equal(result.status, 'ready_for_review');
+  assert.equal(apply.clicks, 0);
+});
+
+test('form preparation gates an Apply button inside an application form', async () => {
+  const apply = button('Apply', { insideForm: true });
+  const result = await loadWorkflow('prepare-application.js')(fakePage({ buttons: [apply] }));
+
+  assert.equal(result.status, 'approval_required');
+  assert.equal(apply.clicks, 0);
+});
+
+test('form preparation recognizes a compound final-submit label', async () => {
+  const submit = button('Review and Submit');
+  const result = await loadWorkflow('prepare-application.js')(fakePage({ buttons: [submit] }));
 
   assert.equal(result.status, 'approval_required');
   assert.equal(submit.clicks, 0);
@@ -156,6 +203,31 @@ test('form preparation does not advance with an invalid required field', async (
   assert.equal(next.clicks, 0);
 });
 
+test('form preparation treats a selected required radio group as filled', async () => {
+  const result = await loadWorkflow('prepare-application.js')(fakePage({
+    fields: [
+      control({ label: 'Yes', type: 'radio', name: 'authorization', required: true, checked: true, groupLabel: 'Work authorization' }),
+      control({ label: 'No', type: 'radio', name: 'authorization', required: true, checked: false, groupLabel: 'Work authorization' }),
+    ],
+  }));
+
+  assert.equal(result.status, 'ready_for_review');
+  assert.equal(result.fields.length, 1);
+  assert.equal(result.fields[0].filled, true);
+  assert.deepEqual(JSON.parse(JSON.stringify(result.fields[0].options)), ['Yes', 'No']);
+});
+
+test('form preparation ignores hidden required fields', async () => {
+  const next = button('Next');
+  const result = await loadWorkflow('prepare-application.js')(fakePage({
+    fields: [control({ label: 'Conditional field', required: true, visible: false })],
+    buttons: [next],
+  }));
+
+  assert.equal(result.status, 'advanced');
+  assert.equal(next.clicks, 1);
+});
+
 test('form preparation advances only one safe step after required fields are valid', async () => {
   const next = button('Review');
   const result = await loadWorkflow('prepare-application.js')(fakePage({
@@ -169,6 +241,7 @@ test('form preparation advances only one safe step after required fields are val
 
 test('WhatsApp reading deduplicates messages and links and caps message output', async () => {
   const messages = [
+    { innerText: 'Hidden role https://jobs.example/hidden', getBoundingClientRect: () => ({ width: 0, height: 0 }) },
     { innerText: 'Role one https://jobs.example/1' },
     { innerText: 'Role one https://jobs.example/1' },
     ...Array.from({ length: 105 }, (_, index) => ({ innerText: `Role ${index + 2} https://jobs.example/${index + 2}` })),
@@ -181,6 +254,8 @@ test('WhatsApp reading deduplicates messages and links and caps message output',
   assert.equal(result.messages.length, 100);
   assert.equal(result.links.length, 100);
   assert.equal(new Set(result.messages).size, result.messages.length);
+  assert.equal(result.messages.some((message) => message.startsWith('Hidden role')), false);
+  assert.equal(result.links.includes('https://jobs.example/hidden'), false);
 });
 
 test('profile example is placeholder-only and the local profile is ignored', () => {
@@ -190,4 +265,29 @@ test('profile example is placeholder-only and the local profile is ignored', () 
 
   const ignoreRules = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
   assert.match(ignoreRules, /^automation\/profile\.local\.json$/m);
+});
+
+test('active browser workflows do not use direct Playwright/CDP or embed personal contact data', () => {
+  const roots = ['linkedin', 'wellfound', 'careers', 'googleforms', 'whatsapp', 'automation/mcp'];
+  const sourceFiles = [];
+  const visit = (directory) => {
+    for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
+      const fullPath = path.join(directory, entry.name);
+      if (entry.isDirectory()) visit(fullPath);
+      else if (/\.(?:cjs|js)$/i.test(entry.name)) sourceFiles.push(fullPath);
+    }
+  };
+  for (const root of roots) visit(path.join(__dirname, '..', root));
+
+  assert.ok(sourceFiles.length >= 3);
+  for (const file of sourceFiles) {
+    const source = fs.readFileSync(file, 'utf8');
+    assert.doesNotMatch(source, /connectOverCDP|CDP_ENDPOINT|remote-debugging-port|127\.0\.0\.1:9222/i, file);
+    assert.doesNotMatch(source, /require\s*\(\s*['"]playwright['"]\s*\)/i, file);
+    assert.doesNotMatch(source, /[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i, file);
+    assert.doesNotMatch(source, /Aryan\s+Batra/i, file);
+  }
+
+  const manifest = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'package.json'), 'utf8'));
+  assert.equal(manifest.dependencies?.playwright, undefined);
 });

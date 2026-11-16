@@ -6,7 +6,7 @@ Move the public Job Automation Tools repository from Node scripts attached to a 
 
 ## Goals
 
-- Document the `@playwright/mcp` extension setup in `~/.config/opencode/opencode.jsonc`, including a single-profile setup and local-only token handling.
+- Document the `@playwright/mcp` extension setup in `~/.config/opencode/opencode.jsonc`, including the single-profile setup. The official extension mode does not require a separate token; any credential required by a custom deployment must remain local-only.
 - Provide reusable MCP-callable workflows to collect LinkedIn job cards, inspect application forms, advance only safe non-submit steps, and read an already-open WhatsApp channel.
 - Keep profile-specific values out of public source and provide a blank, non-personal example profile for each user to copy locally.
 - Stop before final application submission. Never guess consequential answers or solve/bypass CAPTCHA; return those cases for human judgment/intervention.

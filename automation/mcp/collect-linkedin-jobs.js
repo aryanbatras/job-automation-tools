@@ -9,10 +9,12 @@ async (page) => {
       const card = link.closest(
         'li.jobs-search-results__list-item, .job-card-container, .job-card-list__entity-lockup, article',
       ) || link.parentElement;
+      const rect = link.getBoundingClientRect();
       return {
         href: link.href,
         linkText: link.innerText || link.getAttribute('aria-label') || '',
         cardText: card?.innerText || '',
+        visible: rect.width > 0 && rect.height > 0,
       };
     }),
   );
@@ -20,6 +22,7 @@ async (page) => {
   const jobs = [];
   const seen = new Set();
   for (const card of cards) {
+    if (!card.visible) continue;
     let url;
     try {
       url = new URL(card.href);

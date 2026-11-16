@@ -42,11 +42,11 @@
 - Consumes: no production workflow files initially.
 - Produces: `npm test` runs Node's built-in test runner; each MCP workflow is an async function expression that receives `page` and returns bounded JSON-safe data.
 
-- [ ] **Step 1: Write tests first** for LinkedIn normalization/deduplication; form output redaction; no final-submit click; CAPTCHA stop; incomplete/invalid required-field stop; one safe next-step click; WhatsApp message/link deduplication and bounds.
-- [ ] **Step 2: Run `node --test tests/mcp-workflows.test.cjs` and verify RED** on missing workflow behavior.
-- [ ] **Step 3: Add the `test` script** (`node --test tests/*.test.cjs`) and implement the three workflow function expressions with the interfaces named above.
-- [ ] **Step 4: Run `npm test` and verify GREEN**, including the secret-sentinel assertion and zero final-submit clicks.
-- [ ] **Step 5: Commit the tested workflows, test command, spec, and plan** as `feat: add reusable Playwright MCP workflows`.
+- [x] **Step 1: Write tests first** for LinkedIn normalization/deduplication; form output redaction; no final-submit click; CAPTCHA stop; incomplete/invalid required-field stop; one safe next-step click; WhatsApp message/link deduplication and bounds.
+- [x] **Step 2: Run `node --test tests/mcp-workflows.test.cjs` and verify RED** on missing workflow behavior.
+- [x] **Step 3: Add the `test` script** (`node --test tests/*.test.cjs`) and implement the three workflow function expressions with the interfaces named above.
+- [x] **Step 4: Run `npm test` and verify GREEN**, including the secret-sentinel assertion and zero final-submit clicks.
+- [x] **Step 5: Commit the tested workflows, test command, spec, and plan** as `feat: add reusable Playwright MCP workflows`.
 
 ### Task 2: Add reusable user instructions and local profile template
 
@@ -60,12 +60,12 @@
 - Consumes: MCP workflow paths and statuses from Task 1.
 - Produces: agent policy and an empty, copyable local profile template.
 
-- [ ] **Step 1: Add tests** that the example profile contains no actual personal data and `.gitignore` excludes `automation/profile.local.json`.
-- [ ] **Step 2: Run the focused tests and verify RED.**
-- [ ] **Step 3: Add the placeholder-only profile template and ignore rule.**
-- [ ] **Step 4: Add `AGENTS.md` instructions** for job review, profile-grounded answers, untrusted page content, CAPTCHA handoff, the MCP workflows, and explicit user confirmation before final submission.
-- [ ] **Step 5: Run the focused tests and verify GREEN.**
-- [ ] **Step 6: Commit the profile template and operating policy** as `docs: add local profile and MCP safety instructions`.
+- [x] **Step 1: Add tests** that the example profile contains no actual personal data and `.gitignore` excludes `automation/profile.local.json`.
+- [x] **Step 2: Run the focused tests and verify RED.**
+- [x] **Step 3: Add the placeholder-only profile template and ignore rule.**
+- [x] **Step 4: Add `AGENTS.md` instructions** for job review, profile-grounded answers, untrusted page content, CAPTCHA handoff, the MCP workflows, and explicit user confirmation before final submission.
+- [x] **Step 5: Run the focused tests and verify GREEN.**
+- [x] **Step 6: Commit the profile template and operating policy** as `docs: add local profile and MCP safety instructions`.
 
 ### Task 3: Migrate README and remove CDP entrypoints
 
@@ -80,15 +80,15 @@
 - Test: `tests/mcp-workflows.test.cjs`
 
 **Interfaces:**
-- Consumes: workflow files and policy from Tasks 2–3.
+- Consumes: workflow files and policy from Tasks 1–2.
 - Produces: user-facing setup/usage for one-profile Playwright MCP; no direct Node Playwright dependency or active CDP script.
 
-- [ ] **Step 1: Add a migration test** that active application code no longer imports the Node Playwright package or references CDP endpoints/`connectOverCDP`.
-- [ ] **Step 2: Run the test and verify RED** against the current scripts.
-- [ ] **Step 3: Update README** with the OpenCode JSONC configuration shape, extension/token setup, single-profile requirement, MCP workflow invocation, safe review sequence, CAPTCHA policy, local profile setup, and migration from Node/CDP commands.
-- [ ] **Step 4: Remove the five superseded direct-browser scripts** and the now-unused `playwright` dependency; preserve `package.json` project metadata and test script.
-- [ ] **Step 5: Run `npm test`, `node --check` on every MCP workflow and test file, plus repository scans for CDP and personal data; verify GREEN and no active CDP references.**
-- [ ] **Step 6: Commit the README migration and removal of obsolete direct-browser scripts** as `refactor: replace CDP scripts with Playwright MCP workflows`.
+- [x] **Step 1: Add a migration test** that active application code no longer imports the Node Playwright package or references CDP endpoints/`connectOverCDP`.
+- [x] **Step 2: Run the test and verify RED** against the current scripts.
+- [x] **Step 3: Update README** with the OpenCode JSONC configuration shape, supported extension setup (and local-only handling for any custom credentials), single-profile requirement, MCP workflow invocation, safe review sequence, CAPTCHA policy, local profile setup, and migration from Node/CDP commands.
+- [x] **Step 4: Remove the five superseded direct-browser scripts** and the now-unused `playwright` dependency; preserve `package.json` project metadata and test script.
+- [x] **Step 5: Run `npm test`, `node --check` on every MCP workflow and test file, plus repository scans for CDP and personal data; verify GREEN and no active CDP references.**
+- [x] **Step 6: Commit the README migration and removal of obsolete direct-browser scripts** as `refactor: replace CDP scripts with Playwright MCP workflows`.
 
 ### Task 4: Review and publish to `main`
 

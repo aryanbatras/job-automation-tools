@@ -6,7 +6,11 @@ async (page) => {
 
   const rawMessages = await page.locator(
     'span.selectable-text, div.copyable-text, div[class*="message-in"] span',
-  ).evaluateAll((elements) => elements.map((element) => (element.innerText || '').trim()).filter(Boolean));
+  ).evaluateAll((elements) => elements.flatMap((element) => {
+    const rect = element.getBoundingClientRect();
+    const message = (element.innerText || '').trim();
+    return rect.width > 0 && rect.height > 0 && message ? [message] : [];
+  }));
 
   const messages = [];
   const seenMessages = new Set();
