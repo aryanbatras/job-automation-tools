@@ -101,4 +101,4 @@ async (page) => {
   }
 
   return { status: 'ok', count: jobs.length, jobs };
-};
+}

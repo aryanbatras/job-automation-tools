@@ -162,4 +162,4 @@ async (page) => {
     fields: inventory.fields,
     unsupported,
   };
-};
+}

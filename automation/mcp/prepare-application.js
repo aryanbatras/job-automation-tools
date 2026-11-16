@@ -166,4 +166,4 @@ async (page) => {
   }
 
   return { status: 'ready_for_review', fields };
-};
+}

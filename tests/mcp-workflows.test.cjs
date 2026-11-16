@@ -9,6 +9,8 @@ const radioGroupScopes = new Map();
 
 function loadWorkflow(name) {
   const source = fs.readFileSync(workflowPath(name), 'utf8');
+  // Trailing semicolons break browser_run_code_unsafe filename loading.
+  assert.ok(source.trimEnd().endsWith('}'), `${name} must end with a closing brace, no trailing semicolon`);
   const workflow = vm.runInNewContext(source, { URL, Set, Map, Array, Object, String, RegExp });
   assert.equal(typeof workflow, 'function', `${name} must evaluate to an async function`);
   return workflow;
