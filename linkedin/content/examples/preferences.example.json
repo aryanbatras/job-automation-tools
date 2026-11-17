@@ -1,0 +1,40 @@
+{
+  "version": 1,
+  "search": {
+    "keywords": "remote java full stack engineer",
+    "location": "India",
+    "geoId": "102713980",
+    "remoteOnly": true,
+    "easyApplyOnly": true,
+    "datePosted": "7d",
+    "maxPages": 4,
+    "maxApplications": 25,
+    "experienceLevels": [
+      "entry"
+    ]
+  },
+  "targets": {
+    "includeTitles": [],
+    "excludeTitles": [],
+    "excludeCompanies": [],
+    "excludeWords": [
+      "senior",
+      "staff",
+      "principal",
+      "manager",
+      "head of"
+    ]
+  },
+  "answers": {
+    "resumeFile": "your-resume.pdf",
+    "autoFillUnknown": false
+  },
+  "policy": {
+    "requireVerifiedSubmission": true,
+    "stopOnChallenge": true,
+    "fieldTimeoutSeconds": 30
+  },
+  "logging": {
+    "markdownFile": "automation/content/local/applications.md"
+  }
+}

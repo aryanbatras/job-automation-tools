@@ -1,0 +1,171 @@
+{
+  "version": 1,
+  "onboarding": {
+    "confirmed": true
+  },
+  "identity": {
+    "legalName": "Aryan Batra",
+    "preferredName": "Aryan"
+  },
+  "contact": {
+    "email": "batraaryan03@gmail.com",
+    "phone": "+91 9149469833",
+    "location": "Jammu, Jammu and Kashmir, India"
+  },
+  "resume": {
+    "sourcePath": "linkedin/content/local/AryanBatraResume.pdf",
+    "confirmed": true
+  },
+  "links": {
+    "linkedin": {
+      "status": "answered",
+      "value": "https://linkedin.com/in/aryanbatra"
+    },
+    "github": {
+      "status": "answered",
+      "value": "https://github.com/aryanbatras"
+    },
+    "portfolio": {
+      "status": "answered",
+      "value": "https://aryanbatra.is-a.dev"
+    }
+  },
+  "employment": {
+    "status": "answered",
+    "items": [
+      {
+        "company": "Opus Wealth",
+        "title": "Software Engineer Intern",
+        "location": "Bengaluru, Karnataka (Remote)",
+        "start": "2026-09",
+        "end": "present",
+        "highlights": [
+          "Full-stack mutual fund platform (Next.js, Python, PostgreSQL) processing daily NAV/AUM for 14,300+ funds",
+          "Docker data pipelines for AMFI datasets with caching for real-time chart rendering"
+        ]
+      },
+      {
+        "company": "A2B Digital Solutions",
+        "title": "Software Engineer Intern (Project Lead)",
+        "location": "Remote",
+        "start": "2026-05",
+        "end": "2026-07",
+        "highlights": [
+          "Led 3 engineers on financial platform (Spring Boot, Next.js, PostgreSQL, 15,000+ daily transactions)",
+          "Fine-grained RBAC and dual-session impersonation, cutting security audit overhead by 40%",
+          "Reusable UI library via Storybook and Chromatic, published as NPM packages to JFrog Artifactory",
+          "Async queues with AWS SQS/SNS/SES and LocalStack, cutting cloud test cycles by 60%",
+          "PDF generation engine (JTE, Thymeleaf, OpenHtmlToPdf) and interactive OpenAPI Swagger docs",
+          "Flyway DB migrations and Prometheus/Grafana/Loki stack on AWS EC2 at 99.95% uptime"
+        ]
+      },
+      {
+        "company": "Polarions",
+        "title": "AI Automation Engineer Intern",
+        "location": "Sweden (Remote)",
+        "start": "2025-10",
+        "end": "2025-11",
+        "highlights": [
+          "Distribution engine using n8n, Meta API and Cloudflare Workers at 5,000+ executions/day",
+          "Orchestrated Mistral AI and Groq models via OpenRouter for cross-platform content synthesis",
+          "Mentored 4 junior interns on modular code design, decreasing pipeline failure rates by 35%"
+        ]
+      },
+      {
+        "company": "Sashel",
+        "title": "Software Engineer Intern",
+        "location": "Remote",
+        "start": "2025-07",
+        "end": "2025-10",
+        "highlights": [
+          "Co-architected e-commerce platform with 12 microservices (Spring Boot, AWS SQS/SNS, API Gateway)",
+          "Engineered 4 core services (Profile, Buyer, Seller Finance, Logistics) on normalized AWS RDS",
+          "7 Activepieces workflows for Shopify, Shiprocket and Razorpay payouts processing $20k+",
+          "Containerized services with Docker and Nginx on AWS EC2, acting as short-term Scrum Master"
+        ]
+      }
+    ]
+  },
+  "education": {
+    "status": "answered",
+    "items": [
+      {
+        "institution": "Mahant Bachittar Singh College of Engineering (affiliated with University of Jammu)",
+        "degree": "B.Tech in Computer Science and Engineering",
+        "location": "Jammu, Jammu and Kashmir, India",
+        "start": "2023",
+        "end": "2027",
+        "grade": "CGPA 8.2/10.0"
+      }
+    ]
+  },
+  "skills": {
+    "status": "answered",
+    "items": [
+      "Programming Languages: Java, JavaScript (ES6+), TypeScript, C/C++, Python, SQL, Bash, Kotlin, Dart, Lua, HTML/CSS",
+      "Backend and Frameworks: Spring Boot, Node.js, REST APIs, Microservices, Hibernate, Flyway, JTE, Thymeleaf, OpenHtmlToPdf",
+      "Cloud and Infrastructure: AWS (EC2, RDS, S3, SQS, SNS, API Gateway), LocalStack, Docker, Nginx, Firebase Auth, Supabase",
+      "Databases and Monitoring: PostgreSQL, Turso Cloud DB (libSQL), MySQL, Redis, Prometheus, Grafana, Loki, Axiom",
+      "Frontend and Mobile: Next.js 15, React.js, Tailwind CSS, Three.js, SolidJS, GSAP, React Flow, React Quill, Storybook, Chromatic, Flutter",
+      "AI, ML and Automation: RAG, LLMs, OpenRouter, Groq, Mistral AI, Meta Graph API, n8n, Activepieces, Zapier",
+      "DevOps, Tools and Testing: JFrog Artifactory, Jenkins, GitHub Actions, Vitest, JUnit 5, JaCoCo, OpenAPI Swagger, Ink, Pastel, AT Protocol",
+      "Core CS Foundations: System Design, Microservices, Data Structures and Algorithms, Operating Systems, Computer Networks"
+    ]
+  },
+  "certifications": {
+    "status": "not_applicable",
+    "items": []
+  },
+  "preferences": {
+    "targetRoles": [
+      "Java Full Stack Engineer",
+      "React / Next.js Engineer",
+      "AI Automation Engineer"
+    ],
+    "locations": [
+      "Remote (India)",
+      "Jammu, Jammu and Kashmir, India"
+    ],
+    "workModes": [
+      "Remote"
+    ],
+    "availability": {
+      "status": "answered",
+      "value": "Immediately, remote"
+    },
+    "compensation": {
+      "status": "answered",
+      "value": "25K per month; 4 LPA if annual expectation is asked"
+    },
+    "travelRelocation": {
+      "status": "answered",
+      "value": "Remote only, no relocation"
+    }
+  },
+  "sensitive": {
+    "workAuthorization": {
+      "status": "answered",
+      "value": "Authorized to work without sponsorship"
+    },
+    "sponsorship": {
+      "status": "not_applicable",
+      "value": null
+    },
+    "criminalHistory": {
+      "status": "answered",
+      "value": "No criminal history"
+    },
+    "disability": {
+      "status": "answered",
+      "value": "Migraine due to sounds"
+    },
+    "veteranStatus": {
+      "status": "prefer_not_to_disclose",
+      "value": null
+    },
+    "eeoDemographics": {
+      "status": "prefer_not_to_disclose",
+      "value": null
+    }
+  }
+}

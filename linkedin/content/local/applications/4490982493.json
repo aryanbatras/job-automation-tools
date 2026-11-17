@@ -1,0 +1,42 @@
+{
+  "job": "Android Developer",
+  "company": "RTBDemand.com",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4490982493/",
+  "id": "4490982493",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "Email",
+      "value": "batraaryan03@gmail.com",
+      "type": "select-one",
+      "source": "confirmed"
+    },
+    {
+      "label": "Phone country code",
+      "value": "India (+91)",
+      "type": "select-one",
+      "source": "confirmed"
+    },
+    {
+      "label": "Phone",
+      "value": "9149469833",
+      "type": "tel",
+      "source": "confirmed"
+    },
+    {
+      "label": "Resume",
+      "value": "AryanBatraResume.pdf",
+      "type": "radio",
+      "source": "confirmed"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

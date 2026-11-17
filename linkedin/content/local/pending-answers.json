@@ -1,0 +1,599 @@
+{
+  "version": 1,
+  "job": {
+    "title": "",
+    "company": ""
+  },
+  "entries": [
+    {
+      "label": "How many years of work experience do you have with Java?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with java",
+        "years of experience with java"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with JavaScript?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with javascript",
+        "years of experience with javascript"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with TypeScript?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with typescript",
+        "years of experience with typescript"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with React?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with react",
+        "years of experience with react"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with React.js?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with react.js",
+        "years of experience with react.js"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Next.js?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with next.js",
+        "years of experience with next.js"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Node.js?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with node.js",
+        "years of experience with node.js"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Python?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with python",
+        "years of experience with python"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with SQL?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with sql",
+        "years of experience with sql"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Spring Boot?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with spring boot",
+        "years of experience with spring boot"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Spring?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with spring",
+        "years of experience with spring"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with AWS?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with aws",
+        "years of experience with aws"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Amazon Web Services (AWS)?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with amazon web services (aws)",
+        "years of experience with amazon web services (aws)"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Docker?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with docker",
+        "years of experience with docker"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with PostgreSQL?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with postgresql",
+        "years of experience with postgresql"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with MySQL?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with mysql",
+        "years of experience with mysql"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with PostgreSQL/MySQL?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with postgresql/mysql",
+        "years of experience with postgresql/mysql"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Microservices?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with microservices",
+        "years of experience with microservices"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Redis?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with redis",
+        "years of experience with redis"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with REST APIs?",
+      "value": "1",
+      "keywords": [
+        "years of work experience do you have with rest apis",
+        "years of experience with rest apis"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Golang?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with golang",
+        "years of experience with golang"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Go?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with go",
+        "years of experience with go"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with EDI?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with edi",
+        "years of experience with edi"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Kubernetes?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with kubernetes",
+        "years of experience with kubernetes"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with .NET?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with .net",
+        "years of experience with .net"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with C++?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with c++",
+        "years of experience with c++"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Rust?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with rust",
+        "years of experience with rust"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Angular?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with angular",
+        "years of experience with angular"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Vue.js?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with vue.js",
+        "years of experience with vue.js"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Vue?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with vue",
+        "years of experience with vue"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Ruby?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with ruby",
+        "years of experience with ruby"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with PHP?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with php",
+        "years of experience with php"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Scala?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with scala",
+        "years of experience with scala"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Kotlin?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with kotlin",
+        "years of experience with kotlin"
+      ]
+    },
+    {
+      "label": "How many years of total work experience do you have?",
+      "value": "1",
+      "keywords": [
+        "years of total work experience",
+        "years of work experience do you have",
+        "total experience"
+      ]
+    },
+    {
+      "label": "How many years of work experience do you have with Hadoop?",
+      "value": "0",
+      "keywords": [
+        "years of work experience do you have with hadoop",
+        "years of experience with hadoop"
+      ]
+    },
+    {
+      "label": "How soon can you join (in days) after accepting the offer?",
+      "value": "0",
+      "keywords": [
+        "how soon can you join",
+        "join in days",
+        "how soon can you start in days"
+      ]
+    },
+    {
+      "label": "relocate",
+      "value": "No",
+      "keywords": [
+        "willing to relocate",
+        "relocation",
+        "open to relocation"
+      ]
+    },
+    {
+      "label": "Can you give minimum 4-5hrs in a day?",
+      "value": "Yes",
+      "keywords": [
+        "4-5hrs in a day",
+        "minimum hours in a day"
+      ]
+    },
+    {
+      "label": "Are you comfortable to work as consultant?",
+      "value": "Yes",
+      "keywords": [
+        "work as consultant",
+        "comfortable as consultant"
+      ]
+    },
+    {
+      "label": "What's your expected salary? Please note our salary package is all fixed, NO variable part.",
+      "value": "4",
+      "keywords": [
+        "expected salary all fixed",
+        "expected salary in lpa",
+        "expected ctc in lpa"
+      ]
+    },
+    {
+      "label": "expected salary in LPA",
+      "value": "4",
+      "keywords": [
+        "expected salary in lpa",
+        "expected ctc"
+      ]
+    },
+    {
+      "label": "phone country code",
+      "value": "India (+91)",
+      "keywords": [
+        "country code",
+        "phone country"
+      ]
+    },
+    {
+      "label": "phone number local",
+      "value": "9149469833",
+      "keywords": [
+        "mobile phone number",
+        "phone number without country code",
+        "contact number"
+      ]
+    },
+    {
+      "label": "notice period in days",
+      "value": "15",
+      "keywords": [
+        "notice period in days",
+        "joining in days"
+      ]
+    },
+    {
+      "label": "first name",
+      "value": "Aryan"
+    },
+    {
+      "label": "last name",
+      "value": "Batra"
+    },
+    {
+      "label": "full name",
+      "value": "Aryan Batra"
+    },
+    {
+      "label": "name",
+      "value": "Aryan Batra"
+    },
+    {
+      "label": "email address",
+      "value": "batraaryan03@gmail.com",
+      "keywords": [
+        "email"
+      ]
+    },
+    {
+      "label": "phone number",
+      "value": "+91 9149469833",
+      "keywords": [
+        "phone",
+        "mobile"
+      ]
+    },
+    {
+      "label": "city",
+      "value": "Jammu",
+      "keywords": [
+        "location",
+        "city"
+      ]
+    },
+    {
+      "label": "current company",
+      "value": "Opus Wealth",
+      "keywords": [
+        "current company",
+        "employer"
+      ]
+    },
+    {
+      "label": "current title",
+      "value": "Software Engineer Intern",
+      "keywords": [
+        "current title",
+        "current job title"
+      ]
+    },
+    {
+      "label": "school",
+      "value": "Mahant Bachittar Singh College of Engineering",
+      "keywords": [
+        "school",
+        "university",
+        "college",
+        "institution"
+      ]
+    },
+    {
+      "label": "degree",
+      "value": "B.Tech in Computer Science and Engineering",
+      "keywords": [
+        "degree",
+        "education"
+      ]
+    },
+    {
+      "label": "years of experience numeric",
+      "value": "1",
+      "keywords": [
+        "years of experience numeric"
+      ]
+    },
+    {
+      "label": "years of experience",
+      "value": "1 year",
+      "keywords": [
+        "years of experience",
+        "experience"
+      ]
+    },
+    {
+      "label": "sponsorship",
+      "value": "No",
+      "keywords": [
+        "sponsorship"
+      ]
+    },
+    {
+      "label": "authorized to work",
+      "value": "Yes",
+      "keywords": [
+        "authorized to work",
+        "legally authorized",
+        "work authorization"
+      ]
+    },
+    {
+      "label": "start date",
+      "value": "Immediately, remote",
+      "keywords": [
+        "start date",
+        "available",
+        "earliest"
+      ]
+    },
+    {
+      "label": "current ctc",
+      "value": "3",
+      "keywords": [
+        "current ctc",
+        "current salary package",
+        "current salary",
+        "last drawn salary"
+      ]
+    },
+    {
+      "label": "desired salary",
+      "value": "25K per month; 4 LPA if annual expectation is asked",
+      "keywords": [
+        "salary"
+      ]
+    },
+    {
+      "label": "linkedin",
+      "value": "https://linkedin.com/in/aryanbatra",
+      "keywords": [
+        "linkedin"
+      ]
+    },
+    {
+      "label": "github",
+      "value": "https://github.com/aryanbatras",
+      "keywords": [
+        "github"
+      ]
+    },
+    {
+      "label": "portfolio",
+      "value": "https://aryanbatra.is-a.dev",
+      "keywords": [
+        "portfolio",
+        "website"
+      ]
+    },
+    {
+      "label": "additional information",
+      "value": "Java full-stack engineer with hands-on experience across Spring Boot, Next.js, PostgreSQL and AWS from internship roles at Opus Wealth, A2B Digital Solutions, Polarions and Sashel: a mutual-fund platform serving 14,300+ funds, a 12-microservice e-commerce platform, and AI automation pipelines running 5,000+ executions a day. B.Tech Computer Science (2027, CGPA 8.2). Available immediately for remote work.",
+      "keywords": [
+        "additional information",
+        "cover letter",
+        "message",
+        "why do you want",
+        "tell us",
+        "anything else"
+      ]
+    },
+    {
+      "label": "resume",
+      "value": "AryanBatraResume.pdf",
+      "keywords": [
+        "resume",
+        "cv"
+      ]
+    },
+    {
+      "label": "notice period",
+      "value": "15",
+      "keywords": [
+        "join us",
+        "joining",
+        "notice period",
+        "notice period numeric"
+      ]
+    },
+    {
+      "label": "expected ctc",
+      "value": "400000",
+      "keywords": [
+        "expected ctc",
+        "expected salary",
+        "desired salary"
+      ]
+    },
+    {
+      "label": "months of experience",
+      "value": "16",
+      "keywords": [
+        "months of experience",
+        "total additional months"
+      ]
+    },
+    {
+      "label": "headline",
+      "value": "Java Full Stack Engineer | React & Next.js Specialist",
+      "keywords": [
+        "headline",
+        "professional headline"
+      ]
+    },
+    {
+      "label": "summary",
+      "value": "Java full stack and React/Next.js engineer specialising in backend infrastructure, clean microservices, cloud DevOps and AI orchestration. Project lead experience with a mutual fund platform serving 14,300+ funds, a 12-microservice e-commerce platform, and AI automation pipelines running 5,000+ executions a day.",
+      "keywords": [
+        "summary",
+        "about you",
+        "tell us about yourself"
+      ]
+    },
+    {
+      "label": "authorized to work",
+      "value": "Yes",
+      "keywords": [
+        "authorized to work",
+        "legally authorized",
+        "work authorization"
+      ]
+    }
+  ]
+}

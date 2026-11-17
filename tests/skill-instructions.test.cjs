@@ -23,11 +23,11 @@ test('job application skill is discoverable with the path-derived OpenCode ID', 
 test('skill gates onboarding, provider processing, every field, unknown answers, and submissions', () => {
   const skill = fs.readFileSync(skillPath, 'utf8');
   for (const requirement of [
-    'automation/scripts/profile_store.py',
-    'automation/scripts/ingest_resume.py',
-    'automation/content/local/profile.json',
-    'automation/content/local/answer-bank.json',
-    'automation/content/local/site-policies.json',
+    'linkedin/automation/scripts/profile_store.py',
+    'linkedin/automation/scripts/ingest_resume.py',
+    'linkedin/content/local/profile.json',
+    'linkedin/content/local/answer-bank.json',
+    'linkedin/content/local/site-policies.json',
     'configured OpenCode model provider',
     'every visible field',
     'source',
@@ -40,16 +40,16 @@ test('skill gates onboarding, provider processing, every field, unknown answers,
     'eeoDemographics',
     'human_handoff',
     'LinkedIn',
-    'automation/mcp/inspect-application.js',
-    'automation/mcp/start-application.js',
-    'automation/mcp/prepare-application.js',
-    'automation/mcp/submit-application.js',
+    'companies/generic/inspect-application.js',
+    'companies/generic/start-application.js',
+    'companies/generic/prepare-application.js',
+    'companies/generic/submit-application.js',
     'this exact application',
     'submission_unverified',
   ]) {
     assert.ok(skill.includes(requirement), `skill must include ${requirement}`);
   }
-  assert.match(skill, /Do not call `automation\/mcp\/submit-application\.js` until[\s\S]*?explicit approval/i);
+  assert.match(skill, /Do not call `companies\/generic\/submit-application\.js` until[\s\S]*?explicit approval/i);
 });
 
 test('README and AGENTS use current local data and document setup plus provider disclosure', () => {
@@ -58,7 +58,8 @@ test('README and AGENTS use current local data and document setup plus provider 
 
   for (const content of [readme, agents]) {
     assert.ok(content.includes('.opencode/skills/job-application-automation/SKILL.md'));
-    assert.ok(content.includes('automation/content/local/'));
+    assert.ok(content.includes('linkedin/content/local/'));
+    assert.ok(content.includes('whatsapp/read-whatsapp-channel.js'));
     assert.ok(!content.includes('automation/profile.example.json'));
     assert.ok(!content.includes('automation/profile.local.json'));
   }

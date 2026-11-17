@@ -1,0 +1,45 @@
+{
+  "job": "Software Craftsperson/Java/Angular- II",
+  "company": "Incubyte",
+  "location": "",
+  "url": "https://www.linkedin.com/jobs/view/4489558497/",
+  "id": "4489558497",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "How many years of work experience do you have with Java?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with Angular?",
+      "value": "0",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "What is your current CTC?",
+      "value": "3",
+      "type": "text",
+      "source": "derived"
+    },
+    {
+      "label": "What is your expected CTC?",
+      "value": "400000",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How soon can you join us?",
+      "value": "15",
+      "type": "text",
+      "source": "derived"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true
+  }
+}

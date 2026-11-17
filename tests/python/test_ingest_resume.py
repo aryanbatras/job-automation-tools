@@ -11,13 +11,13 @@ from unittest.mock import patch
 
 
 ROOT = Path(__file__).resolve().parents[2]
-INGEST_PATH = ROOT / "automation" / "scripts" / "ingest_resume.py"
+INGEST_PATH = ROOT / "linkedin" / "automation" / "scripts" / "ingest_resume.py"
 
 
 def load_ingester(test_case):
     if not INGEST_PATH.exists():
-        test_case.fail("automation/scripts/ingest_resume.py is missing")
-    return importlib.import_module("automation.scripts.ingest_resume")
+        test_case.fail("linkedin/automation/scripts/ingest_resume.py is missing")
+    return importlib.import_module("linkedin.automation.scripts.ingest_resume")
 
 
 class FakePdfPage:
@@ -134,7 +134,7 @@ class ResumeIngestionTests(unittest.TestCase):
 
     def test_draft_is_owner_only_and_stdout_never_contains_resume_text(self):
         if not INGEST_PATH.exists():
-            self.fail("automation/scripts/ingest_resume.py is missing")
+            self.fail("linkedin/automation/scripts/ingest_resume.py is missing")
         content_root = self.root / "content"
         source = self.root / "resume.txt"
         sentinel = "CLI-RESUME-PRIVATE-SENTINEL"

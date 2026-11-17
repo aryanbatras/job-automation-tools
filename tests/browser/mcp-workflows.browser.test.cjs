@@ -6,7 +6,10 @@ const vm = require('node:vm');
 
 const { chromium } = require('playwright');
 
-const workflowPath = (name) => path.join(__dirname, '..', '..', 'automation', 'mcp', name);
+const workflowPath = (name) =>
+  name === 'read-whatsapp-channel.js'
+    ? path.join(__dirname, '..', '..', 'whatsapp', name)
+    : path.join(__dirname, '..', '..', 'companies', 'generic', name);
 
 function loadWorkflow(name) {
   const source = fs.readFileSync(workflowPath(name), 'utf8');

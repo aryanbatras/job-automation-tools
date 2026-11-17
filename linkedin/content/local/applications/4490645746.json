@@ -1,0 +1,60 @@
+{
+  "job": "Full Stack Engineer",
+  "company": "Recro",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4490645746/",
+  "id": "4490645746",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "How many years of work experience do you have with React.js?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with Next.js?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with Google Cloud Platform (GCP)?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "Years of Experience with Golang",
+      "value": "0",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "Current CTC",
+      "value": "3",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "Expected CTC",
+      "value": "400000",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "Notice Period",
+      "value": "15",
+      "type": "text",
+      "source": "confirmed"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

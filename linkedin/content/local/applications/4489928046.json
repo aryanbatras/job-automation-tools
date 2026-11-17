@@ -1,0 +1,36 @@
+{
+  "job": "Java Developer with Hadoop",
+  "company": "Luxoft",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4489928046/",
+  "id": "4489928046",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "How many years of work experience do you have with Java?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with Hadoop?",
+      "value": "0",
+      "type": "text",
+      "source": "derived"
+    },
+    {
+      "label": "How soon can you join (in days) after accepting the offer?",
+      "value": "0",
+      "type": "text",
+      "source": "derived"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

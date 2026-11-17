@@ -1,0 +1,128 @@
+{
+  "version": 1,
+  "answers": {
+    "what is your current ctc": {
+      "label": "What is your current CTC?",
+      "value": "3",
+      "type": "text",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T00:44:53.147Z",
+      "jobIds": [
+        "4489558497"
+      ]
+    },
+    "what is your expected ctc": {
+      "label": "What is your expected CTC?",
+      "value": "400000",
+      "type": "text",
+      "source": "confirmed",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T00:44:53.147Z",
+      "jobIds": [
+        "4489558497"
+      ]
+    },
+    "how soon can you join us": {
+      "label": "How soon can you join us?",
+      "value": "15",
+      "type": "text",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T00:44:53.147Z",
+      "jobIds": [
+        "4489558497"
+      ]
+    },
+    "can u demonstrate expertise in 3d": {
+      "label": "Can u demonstrate expertise in 3D",
+      "value": "Yes",
+      "type": "text",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:25:24.551Z",
+      "jobIds": [
+        "4490972080"
+      ]
+    },
+    "how many years of experience do you have with java and spring boot": {
+      "label": "How many years of experience do you have with Java and Spring Boot?",
+      "value": "1",
+      "type": "text",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:30:04.279Z",
+      "jobIds": [
+        "4491539874"
+      ]
+    },
+    "how many years of experience do you have with mysql or postgresql": {
+      "label": "How many years of experience do you have with MySQL or PostgreSQL?",
+      "value": "1",
+      "type": "text",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:30:04.279Z",
+      "jobIds": [
+        "4491539874"
+      ]
+    },
+    "how many years of experience do you have with aws": {
+      "label": "How many years of experience do you have with AWS?",
+      "value": "1",
+      "type": "text",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:30:04.279Z",
+      "jobIds": [
+        "4491539874"
+      ]
+    },
+    "if you changed jobs in the last 12 months was it because of a layoff or restructuring answer yes if not applicable": {
+      "label": "If you changed jobs in the last 12 months, was it because of a layoff or restructuring? (Answer Yes if not applicable)",
+      "value": "Yes",
+      "type": "radio",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:30:04.279Z",
+      "jobIds": [
+        "4491539874"
+      ]
+    },
+    "are you currently freelancing or working with any other client": {
+      "label": "Are you currently freelancing or working with any other client?",
+      "value": "No",
+      "type": "radio",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:30:04.279Z",
+      "jobIds": [
+        "4491539874"
+      ]
+    },
+    "are you comfortable with a full time exclusive remote role with camera on collaboration and time tracking": {
+      "label": "Are you comfortable with a full-time, exclusive remote role with camera-on collaboration and time tracking?",
+      "value": "Yes",
+      "type": "radio",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T02:30:04.279Z",
+      "jobIds": [
+        "4491539874"
+      ]
+    },
+    "are you an immediate joiner or can join within 30 days": {
+      "label": "Are you an immediate joiner or can join within 30 days?",
+      "value": "Yes",
+      "type": "radio",
+      "source": "derived",
+      "timesSeen": 1,
+      "lastSeen": "2026-11-17T03:57:11.271Z",
+      "jobIds": [
+        "4490007247"
+      ]
+    }
+  },
+  "pending": {},
+  "updatedAt": "2026-11-17T03:57:11.276Z"
+}

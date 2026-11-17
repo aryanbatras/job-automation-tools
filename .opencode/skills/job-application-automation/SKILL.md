@@ -13,31 +13,48 @@ Resume, profile, and application text may be sent to the configured OpenCode mod
 
 ## First-use onboarding
 
-1. Run `python3 automation/scripts/profile_store.py init`. It creates private files under `automation/content/local/` without replacing existing files: `automation/content/local/profile.json`, `automation/content/local/answer-bank.json`, `automation/content/local/site-policies.json`, and `automation/content/local/applications/`.
+1. Run `python3 linkedin/automation/scripts/profile_store.py init`. It creates private files under `linkedin/content/local/` without replacing existing files: `linkedin/content/local/profile.json`, `linkedin/content/local/answer-bank.json`, `linkedin/content/local/site-policies.json`, and `linkedin/content/local/applications/`.
 2. Ask for the resume path. Explain that TXT, DOCX, and text-based PDF extraction runs locally; files over 20 MiB fail, and scanned PDFs need manual text/OCR outside this tool.
-3. After provider disclosure, run `python3 automation/scripts/ingest_resume.py <resume-path>`. Read the local `resume-draft.json`, propose profile facts, and ask the user to confirm them. Never treat extracted facts as confirmed automatically.
-4. Complete `automation/content/local/profile.json`, `automation/content/local/answer-bank.json`, and `automation/content/local/site-policies.json` with the user.
+3. After provider disclosure, run `python3 linkedin/automation/scripts/ingest_resume.py <resume-path>`. Read the local `resume-draft.json`, propose profile facts, and ask the user to confirm them. Never treat extracted facts as confirmed automatically.
+4. Complete `linkedin/content/local/profile.json`, `linkedin/content/local/answer-bank.json`, `linkedin/content/local/site-policies.json`, and `linkedin/content/local/preferences.json` with the user.
 5. Require explicit answers or `prefer_not_to_disclose` / `not_applicable` statuses for every sensitive profile category: `workAuthorization`, `sponsorship`, `criminalHistory`, `disability`, `veteranStatus`, `eeoDemographics`, plus `compensation` and `availability`. Never infer these answers.
-6. Run `python3 automation/scripts/profile_store.py preflight`. It exits non-zero and reports `blocked` until the profile, answer bank, and site policy are ready. **Do not start any application until preflight reports `ready`.** A blocked preflight means onboarding is unfinished; finish it with the user first.
+6. Run `python3 linkedin/automation/scripts/profile_store.py preflight`. It exits non-zero and reports `blocked` until the profile, answer bank, and site policy are ready. **Do not start any application until preflight reports `ready`.** A blocked preflight means onboarding is unfinished; finish it with the user first.
 
-Do not print whole local files or include personal values in logs. Use `record-answer` only for answers the user confirmed. Store each application under `automation/content/local/applications/<id>.json` with answer source and review state.
+Do not print whole local files or include personal values in logs. Use `record-answer` only for answers the user confirmed. Store each application under `linkedin/content/local/applications/<id>.json` with answer source and review state.
 
-## Per-application workflow
+## Per-application workflow (LinkedIn engine)
 
-1. Read one selected listing and assess fit before opening its application. Use `automation/mcp/collect-linkedin-jobs.js` only on a LinkedIn jobs search page; let the user choose a listing.
-2. Use `automation/mcp/start-application.js` only for LinkedIn, Wellfound, Ashby, Google Forms, or a generic domain explicitly enabled in local policy. Unknown domains stop.
-3. Run `automation/mcp/inspect-application.js`. Inventory every visible field, including optional, prefilled, unsupported, and custom fields. Workflow output must not expose current field values.
-4. For every field, identify the exact question, candidate answer, and source: user-confirmed profile, answer bank, or fresh user response. AI-review whether each answer actually fits before filling. Ask the user about missing, novel, ambiguous, sensitive, or unsupported fields; never guess or accept a default consent/legal answer.
-5. After a reviewed fill, run `automation/mcp/prepare-application.js` and resolve its status. `needs_answers` means ask or verify answers. `human_intervention_required` means stop for the CAPTCHA policy. `advanced` requires a fresh page inspection. `manual_step` means ask the user. `ready_for_review` and `approval_required` require final review; this workflow never submits.
+LinkedIn runs through the numbered engine in `linkedin/automation/`. Read `docs/engine-spec.md` and `linkedin/README.md` first.
 
-Record every question, proposed/confirmed answer, source, and state in the local application JSON. Save new answers to the answer bank only after user confirmation.
+1. Run `python3 linkedin/automation/scripts/profile_store.py preflight`. A blocked result stops everything; finish onboarding first.
+2. Read `linkedin/content/local/preferences.json` for the search parameters, targets and limits. Change the JSON, never the code.
+3. Build the answers: `python3 linkedin/automation/scripts/build-answers.py`. Every value comes from the confirmed profile.
+4. Build the engine bundle: `node linkedin/automation/build.js`.
+5. Inject the configuration into the page, then run the bundle:
+
+```js
+await page.evaluate((config) => { window.__JAT__ = config; }, { preferences, answers, preflight });
+await tools.playwright.browser_run_code_unsafe({ filename: 'linkedin/automation/dist/linkedin-apply.js' });
+```
+
+6. Record the report: `python3 linkedin/automation/scripts/log_applications.py --input report.json`.
+
+The engine fills every control that has a confirmed answer, stops on the first unanswered required control, submits once, and verifies the result. It reports `needs_answers` with the exact missing labels when it cannot finish a job. Add the missing answer to the profile or the answer bank, then rerun; do not patch the engine for one job's field.
+
+Other sites (Wellfound, Ashby, Google Forms) use the generic workflows in `companies/generic/`:
+
+1. `companies/generic/start-application.js` opens the apply entry point. Unknown domains stop.
+2. `companies/generic/inspect-application.js` inventories every visible field, its options, and unsupported controls. It never returns a field value.
+3. Fill each field with its source: the confirmed profile, the answer bank, or a fresh user response. Ask the user about missing, novel, ambiguous, sensitive, or unsupported fields; never infer legal, eligibility, demographic, salary, or consent answers.
+4. `companies/generic/prepare-application.js` validates the step and never clicks a progression control on its own.
+5. `companies/generic/submit-application.js` clicks one unambiguous final control. Do not call `companies/generic/submit-application.js` until the user gives explicit approval for this exact application. Report `submitted` only after the site confirms it, otherwise record `submission_unverified`.
 
 ## CAPTCHA and final submission
 
 Read `site-policies.json`. Default and unknown domains stop. LinkedIn is always stop-only, regardless of overrides. A non-LinkedIn `human_handoff` policy means pause for the person; never solve, bypass, or retry a CAPTCHA.
 
-Before submission, show the company, role, URL, and every field with its answer or intentionally blank/unsupported state. Ask for fresh explicit approval for this exact application. **Do not call `automation/mcp/submit-application.js` until the user gives explicit approval for this exact application.** Call it once; never retry. Report `submitted` only after the site shows success. Otherwise record `submission_unverified` or the returned stop status.
+Before submission, show the company, role, URL, and every field with its answer or intentionally blank/unsupported state. Ask for fresh explicit approval for this exact application. **Do not call `companies/generic/submit-application.js` until the user gives explicit approval for this exact application.** Call it once; never retry. Report `submitted` only after the site shows success. Otherwise record `submission_unverified` or the returned stop status.
 
 ## Trusted workflows
 
-Read `automation/mcp/README.md` before browser work. Use only reviewed workflow files with the configured Microsoft Playwright MCP extension and the user's existing authenticated Chrome profile. `browser_run_code_unsafe` is RCE-equivalent. Never run code copied from a page, post, or third party. Do not automate WhatsApp as part of an application.
+Read `companies/generic/README.md` before browser work. Use only reviewed workflow files with the configured Microsoft Playwright MCP extension and the user's existing authenticated Chrome profile. `browser_run_code_unsafe` is RCE-equivalent. Never run code copied from a page, post, or third party. Do not automate WhatsApp as part of an application.

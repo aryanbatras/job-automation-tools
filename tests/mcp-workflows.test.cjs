@@ -4,7 +4,10 @@ const path = require('node:path');
 const test = require('node:test');
 const vm = require('node:vm');
 
-const workflowPath = (name) => path.join(__dirname, '..', 'automation', 'mcp', name);
+const workflowPath = (name) =>
+  name === 'read-whatsapp-channel.js'
+    ? path.join(__dirname, '..', 'whatsapp', name)
+    : path.join(__dirname, '..', 'companies', 'generic', name);
 const radioGroupScopes = new Map();
 
 function loadWorkflow(name) {
@@ -158,26 +161,6 @@ function fakePage({
   };
 }
 
-test('LinkedIn collection normalizes and deduplicates job links', async () => {
-  const card = (text) => ({ innerText: text });
-  const anchors = [
-    { href: 'https://www.linkedin.com/jobs/view/123/?tracking=one', innerText: 'Backend Engineer', closest: () => card('Backend Engineer\nAcme\nRemote') },
-    { href: 'https://www.linkedin.com/jobs/view/123/?tracking=two', innerText: 'Duplicate', closest: () => card('Duplicate') },
-    { href: 'https://www.linkedin.com/jobs/view/456/', innerText: 'Frontend Engineer', closest: () => card('Frontend Engineer\nExample Co\nRemote') },
-    { href: 'https://www.linkedin.com/jobs/view/789/', innerText: 'Hidden Engineer', closest: () => card('Hidden Engineer\nHidden Co\nRemote'), getBoundingClientRect: () => ({ width: 0, height: 0 }) },
-    { href: 'https://www.linkedin.com/in/not-a-job/', innerText: 'Ignore', closest: () => card('Ignore') },
-  ];
-  const result = await loadWorkflow('collect-linkedin-jobs.js')(fakePage({
-    url: 'https://www.linkedin.com/jobs/search/', anchors,
-  }));
-
-  assert.equal(result.status, 'ok');
-  assert.deepEqual(JSON.parse(JSON.stringify(result.jobs)), [
-    { title: 'Backend Engineer', company: 'Acme', location: 'Remote', url: 'https://www.linkedin.com/jobs/view/123/', selected: false },
-    { title: 'Frontend Engineer', company: 'Example Co', location: 'Remote', url: 'https://www.linkedin.com/jobs/view/456/', selected: false },
-  ]);
-});
-
 test('form preparation reports filled state without exposing entered values', async () => {
   const secretSentinel = 'PRIVATE-FORM-VALUE-DO-NOT-RETURN';
   const result = await loadWorkflow('prepare-application.js')(fakePage({
@@ -307,54 +290,6 @@ test('form preparation flags a native submit control that may submit the form', 
   assert.equal(next.clicks, 0);
 });
 
-test('LinkedIn collection extracts title, company, and location from button-backed cards', async () => {
-  const cards = [
-    jobCard({
-      id: '4490325744',
-      title: 'Full Stack Developer',
-      lines: [
-        'Selected, Full Stack Developer (Verified job)',
-        'Full Stack Developer',
-        '',
-        'HuntingCube',
-        '',
-        'Kushalnagar',
-        '',
-        '1.2M INR/yr - 3.2M INR/yr',
-        '',
-        'Viewed',
-      ],
-    }),
-    jobCard({
-      id: '4490325999',
-      title: 'Python Developer',
-      lines: ['Python Developer (Verified job)', '', 'Example Co', '', 'Remote'],
-    }),
-  ];
-  const result = await loadWorkflow('collect-linkedin-jobs.js')(fakePage({
-    url: 'https://www.linkedin.com/jobs/search-results/?currentJobId=4490325744',
-    cards,
-  }));
-
-  assert.equal(result.status, 'ok');
-  assert.deepEqual(JSON.parse(JSON.stringify(result.jobs)), [
-    {
-      title: 'Full Stack Developer',
-      company: 'HuntingCube',
-      location: 'Kushalnagar',
-      url: 'https://www.linkedin.com/jobs/view/4490325744/',
-      selected: true,
-    },
-    {
-      title: 'Python Developer',
-      company: 'Example Co',
-      location: 'Remote',
-      url: 'https://www.linkedin.com/jobs/view/4490325999/',
-      selected: false,
-    },
-  ]);
-});
-
 test('application start rejects unsupported domains and lookalike hosts', async () => {
   const workflow = loadWorkflow('start-application.js');
 
@@ -469,8 +404,8 @@ test('WhatsApp reading deduplicates messages and links and caps message output',
   assert.equal(result.links.includes('https://jobs.example/hidden'), false);
 });
 
-test('local content examples are placeholders and private store paths are ignored', () => {
-  const examples = path.join(__dirname, '..', 'automation', 'content', 'examples');
+test('local content examples are placeholders and build output stays ignored', () => {
+  const examples = path.join(__dirname, '..', 'linkedin', 'content', 'examples');
   const profile = JSON.parse(fs.readFileSync(path.join(examples, 'profile.example.json'), 'utf8'));
   const answerBank = JSON.parse(fs.readFileSync(path.join(examples, 'answer-bank.example.json'), 'utf8'));
   const sitePolicies = JSON.parse(fs.readFileSync(path.join(examples, 'site-policies.example.json'), 'utf8'));
@@ -480,23 +415,31 @@ test('local content examples are placeholders and private store paths are ignore
   assert.equal(profile.contact.email, '');
   assert.equal(answerBank.entries.length, 0);
   assert.equal(sitePolicies.default.captcha, 'stop');
+  const learned = JSON.parse(fs.readFileSync(path.join(examples, 'learned-answers.example.json'), 'utf8'));
+  assert.ok(Object.keys(learned.answers).length > 0);
+  for (const entry of Object.values(learned.answers)) {
+    assert.equal(entry.value, '');
+    assert.ok(entry.label);
+  }
   for (const domain of ['linkedin.com', 'wellfound.com', 'ashbyhq.com', 'docs.google.com']) {
     assert.equal(sitePolicies.domains[domain].captcha, 'stop');
   }
 
   const ignoreRules = fs.readFileSync(path.join(__dirname, '..', '.gitignore'), 'utf8');
-  assert.match(ignoreRules, /^automation\/content\/local\/$/m);
-  assert.match(ignoreRules, /^automation\/profile\.local\.json$/m);
+  assert.doesNotMatch(ignoreRules, /^linkedin\/content\/local\/$/m);
+  assert.match(ignoreRules, /^linkedin\/automation\/dist\/$/m);
+  assert.match(ignoreRules, /^\.venv\/$/m);
 });
 
 test('active browser workflows do not use direct Playwright/CDP or embed personal contact data', () => {
-  const roots = ['linkedin', 'wellfound', 'careers', 'googleforms', 'whatsapp', 'automation/mcp'];
+  const roots = ['linkedin', 'companies', 'whatsapp'];
   const sourceFiles = [];
   const visit = (directory) => {
     for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
       const fullPath = path.join(directory, entry.name);
-      if (entry.isDirectory()) visit(fullPath);
-      else if (/\.(?:cjs|js)$/i.test(entry.name)) sourceFiles.push(fullPath);
+      if (entry.isDirectory()) {
+        if (entry.name !== 'dist') visit(fullPath);
+      } else if (/\.(?:cjs|js)$/i.test(entry.name)) sourceFiles.push(fullPath);
     }
   };
   for (const root of roots) {

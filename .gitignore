@@ -1,14 +1,23 @@
 node_modules/
 .venv/
 .playwright-mcp/
+.serena/
 .superpowers/
 __pycache__/
 *.py[cod]
+.DS_Store
+
+# Build output; rebuild with linkedin/automation/build.js.
+linkedin/automation/dist/
+
+# Local WhatsApp extracts, never repository content.
+/whatsapp/*.txt
+
+# The confirmed resume lives with the LinkedIn content.
 *.pdf
+!linkedin/content/local/AryanBatraResume.pdf
+
+# Historical one-off outputs.
 applied.json
 questions.log
 *-applied.json
-automation/profile.local.json
-automation/content/local/
-/whatsapp/*.txt
-.DS_Store

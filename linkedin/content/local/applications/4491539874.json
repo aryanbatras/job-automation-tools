@@ -1,0 +1,66 @@
+{
+  "job": "Backend Engineer- Java/Springboot",
+  "company": "Textellent, Inc.",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4491539874/",
+  "id": "4491539874",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "How many years of experience do you have with Java and Spring Boot?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of experience do you have with MySQL or PostgreSQL?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of experience do you have with AWS?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "If currently employed, what is your notice period in number of days?",
+      "value": "15",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "If you changed jobs in the last 12 months, was it because of a layoff or restructuring? (Answer Yes if not applicable)",
+      "value": "Yes",
+      "type": "radio",
+      "source": "derived"
+    },
+    {
+      "label": "Are you currently freelancing or working with any other client?",
+      "value": "No",
+      "type": "radio",
+      "source": "derived"
+    },
+    {
+      "label": "Are you comfortable with a full-time, exclusive remote role with camera-on collaboration and time tracking?",
+      "value": "Yes",
+      "type": "radio",
+      "source": "derived"
+    },
+    {
+      "label": "What is your expected compensation in LPA?",
+      "value": "4",
+      "type": "text",
+      "source": "confirmed"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

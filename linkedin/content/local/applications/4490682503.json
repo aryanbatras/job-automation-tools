@@ -1,0 +1,42 @@
+{
+  "job": "Full Stack Developer",
+  "company": "Data Eminence",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4490682503/",
+  "id": "4490682503",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "Email",
+      "value": "batraaryan03@gmail.com",
+      "type": "select-one",
+      "source": "confirmed"
+    },
+    {
+      "label": "Phone country code",
+      "value": "in",
+      "type": "select-one",
+      "source": "derived"
+    },
+    {
+      "label": "Phone",
+      "value": "9149469833",
+      "type": "tel",
+      "source": "derived"
+    },
+    {
+      "label": "Resume",
+      "value": "AryanBatraResume.pdf",
+      "type": "radio",
+      "source": "confirmed"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

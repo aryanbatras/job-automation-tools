@@ -1,0 +1,54 @@
+{
+  "job": "Software Engineer",
+  "company": "American Express Global Business Travel",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4488910094/",
+  "id": "4488910094",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "Resume",
+      "value": "AryanBatraResume.pdf",
+      "type": "radio",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with Python (Programming Language)",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many total years of experience do you have?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "What is your current CTC?",
+      "value": "3",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "What is your expected CTC?",
+      "value": "400000",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "What is your notice period?",
+      "value": "15",
+      "type": "text",
+      "source": "confirmed"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

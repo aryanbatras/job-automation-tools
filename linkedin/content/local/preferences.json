@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "search": {
+    "keywords": [
+      "software developer",
+      "software engineer",
+      "backend developer",
+      "full stack developer",
+      "AI developer",
+      "android developer"
+    ],
+    "location": "India",
+    "geoId": "102713980",
+    "remoteOnly": true,
+    "easyApplyOnly": true,
+    "datePosted": "7d",
+    "maxPages": 3,
+    "maxApplications": 25,
+    "maxAttempts": 60,
+    "experienceLevels": [
+      "entry"
+    ]
+  },
+  "targets": {
+    "includeTitles": [],
+    "titlePatterns": [
+      "software engineer",
+      "software developer",
+      "full ?stack",
+      "back ?end",
+      "front ?end",
+      "web developer",
+      "application engineer",
+      "ai engineer",
+      "ai developer",
+      "ai app",
+      "android developer",
+      "mobile developer"
+    ],
+    "excludeTitles": [],
+    "excludeCompanies": [],
+    "excludeWords": [
+      "senior",
+      "staff",
+      "principal",
+      "manager",
+      "head of",
+      "phd",
+      "lead"
+    ]
+  },
+  "answers": {
+    "resumeFile": "AryanBatraResume.pdf",
+    "autoFillUnknown": false
+  },
+  "policy": {
+    "requireVerifiedSubmission": true,
+    "stopOnChallenge": true,
+    "fieldTimeoutSeconds": 600
+  },
+  "logging": {
+    "markdownFile": "automation/content/local/applications.md"
+  }
+}

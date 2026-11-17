@@ -1,0 +1,54 @@
+{
+  "job": "Software Engineer",
+  "company": "Genista Biosciences",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4490007247/",
+  "id": "4490007247",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "How many years of work experience do you have with Python (Programming Language)?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with Django?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "How many years of work experience do you have with MongoDB?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "What is your official notice period (in days)?",
+      "value": "15",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "Are you an immediate joiner or can join within 30 days?",
+      "value": "Yes",
+      "type": "radio",
+      "source": "derived"
+    },
+    {
+      "label": "What is your current CTC?",
+      "value": "3",
+      "type": "text",
+      "source": "confirmed"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}

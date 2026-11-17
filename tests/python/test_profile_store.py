@@ -10,13 +10,13 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[2]
-STORE_PATH = ROOT / "automation" / "scripts" / "profile_store.py"
+STORE_PATH = ROOT / "linkedin" / "automation" / "scripts" / "profile_store.py"
 
 
 def load_store(test_case):
     if not STORE_PATH.exists():
-        test_case.fail("automation/scripts/profile_store.py is missing")
-    return importlib.import_module("automation.scripts.profile_store")
+        test_case.fail("linkedin/automation/scripts/profile_store.py is missing")
+    return importlib.import_module("linkedin.automation.scripts.profile_store")
 
 
 def valid_profile():
@@ -242,7 +242,7 @@ class ProfileStoreTests(unittest.TestCase):
         local_root = Path(self.temp.name) / "preflight-content"
         command = [
             sys.executable,
-            str(ROOT / "automation" / "scripts" / "profile_store.py"),
+            str(ROOT / "linkedin" / "automation" / "scripts" / "profile_store.py"),
             "--content-root",
             str(local_root),
         ]
@@ -271,13 +271,16 @@ class ProfileStoreTests(unittest.TestCase):
         self.assertEqual(ready.returncode, 0)
         report = json.loads(ready.stdout)
         self.assertEqual(report["status"], "ready")
-        self.assertEqual(report["checks"], {"profile": "ok", "answerBank": "ok", "sitePolicies": "ok"})
+        self.assertEqual(
+            report["checks"],
+            {"profile": "ok", "answerBank": "ok", "sitePolicies": "ok", "preferences": "ok"},
+        )
 
     def test_preflight_never_prints_profile_values(self):
         local_root = Path(self.temp.name) / "preflight-redaction"
         command = [
             sys.executable,
-            str(ROOT / "automation" / "scripts" / "profile_store.py"),
+            str(ROOT / "linkedin" / "automation" / "scripts" / "profile_store.py"),
             "--content-root",
             str(local_root),
             "preflight",
@@ -297,13 +300,13 @@ class ProfileStoreTests(unittest.TestCase):
         local_root = Path(self.temp.name) / "cli-content"
         command = [
             sys.executable,
-            str(ROOT / "automation" / "scripts" / "profile_store.py"),
+            str(ROOT / "linkedin" / "automation" / "scripts" / "profile_store.py"),
             "--content-root",
             str(local_root),
             "init",
         ]
         if not STORE_PATH.exists():
-            self.fail("automation/scripts/profile_store.py is missing")
+            self.fail("linkedin/automation/scripts/profile_store.py is missing")
         subprocess.run(command, check=True, capture_output=True, text=True, cwd=ROOT)
 
         profile_path = local_root / "local" / "profile.json"

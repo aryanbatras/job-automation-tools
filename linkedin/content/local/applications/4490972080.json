@@ -1,0 +1,34 @@
+{
+  "job": "Software Engineer - 3D Web Applications",
+  "company": "VisCommerce",
+  "location": "India (Remote)",
+  "url": "https://www.linkedin.com/jobs/view/4490972080/",
+  "id": "4490972080",
+  "result": "submitted",
+  "reason": "",
+  "gaps": [],
+  "questions": [
+    {
+      "label": "How many years of work experience do you have with MERN Stack?",
+      "value": "1",
+      "type": "text",
+      "source": "confirmed"
+    },
+    {
+      "label": "Have you completed the following level of education: Bachelor's Degree?",
+      "value": "Yes",
+      "type": "radio"
+    },
+    {
+      "label": "Can u demonstrate expertise in 3D",
+      "value": "Yes",
+      "type": "radio"
+    }
+  ],
+  "signals": {
+    "submittedSignal": true,
+    "statusSignal": false,
+    "appliedSignal": false,
+    "cardApplied": false
+  }
+}
